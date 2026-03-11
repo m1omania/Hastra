@@ -25,6 +25,8 @@ import type {
 import { Container } from "@/components/layout/container";
 import { ButtonLink } from "@/components/ui/button-link";
 import { HeroAvatarStageWebGL } from "@/components/ui/hero-avatar-stage-webgl";
+import { HeroLightRays } from "@/components/ui/hero-light-rays";
+import { HeroParticles } from "@/components/ui/hero-particles";
 import { RussiaMapWithMarkers } from "@/components/ui/russia-map-with-markers";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { SurfaceCard } from "@/components/ui/surface-card";
@@ -60,6 +62,8 @@ export function HomeHeroSectionView({ section }: { section: HomeHeroSection }) {
   return (
     <section className="relative overflow-hidden section-space pt-18 pb-16 sm:pt-24 sm:pb-20 lg:pt-28 lg:pb-20 min-h-[92vh] flex items-center">
       <HeroAvatarStageWebGL className="-z-10" />
+      <HeroLightRays className="z-0" />
+      <HeroParticles className="z-0" />
       <Container className="relative z-10">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:gap-12">
           <div className="max-w-3xl space-y-8 text-left">

@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: "Proxima Nova", "ProximaNova", "Avenir Next", "Segoe UI", sans-serif;
-  --font-display: "Proxima Nova", "ProximaNova", "Avenir Next", "Segoe UI", sans-serif;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --color-background: var(--color-background);
   --color-foreground: var(--color-foreground);
   --color-surface: var(--color-surface);
@@ -91,6 +91,116 @@ a {
     rgba(28, 35, 56, 0.9) 90%,
     rgba(28, 35, 56, 1) 100%
   );
+}
+
+/* Лучи света из правого верхнего угла hero */
+.hero-light-ray {
+  will-change: opacity;
+}
+.hero-light-ray-wrap {
+  opacity: 0.62;
+  animation: hero-rays-swap 8s cubic-bezier(0.4, 0, 0.6, 1) infinite both;
+}
+.hero-light-ray-wrap--accent {
+  animation-duration: 7s;
+}
+.hero-light-ray--accent {
+  mix-blend-mode: soft-light;
+}
+@keyframes hero-rays-swap {
+  0% { opacity: 0.62; }
+  8% { opacity: 0.7; }
+  16% { opacity: 0.8; }
+  24% { opacity: 0.88; }
+  32% { opacity: 0.94; }
+  40% { opacity: 0.97; }
+  50% { opacity: 1; }
+  58% { opacity: 0.97; }
+  66% { opacity: 0.94; }
+  74% { opacity: 0.88; }
+  82% { opacity: 0.8; }
+  90% { opacity: 0.7; }
+  100% { opacity: 0.62; }
+}
+
+/* Частицы в hero: разные размеры, диагональ, плавное появление/исчезновение */
+.hero-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  filter: blur(2px);
+  animation: hero-particle-drift 12s linear infinite both;
+  will-change: transform, opacity;
+}
+.hero-particle--sm {
+  width: 3px;
+  height: 3px;
+}
+.hero-particle--md {
+  width: 5px;
+  height: 5px;
+}
+.hero-particle--lg {
+  width: 8px;
+  height: 8px;
+}
+.hero-particle--warm {
+  background: rgba(255, 245, 220, 0.55);
+}
+.hero-particle--accent {
+  background: rgba(251, 215, 1, 0.4);
+}
+.hero-particle--soft {
+  background: rgba(255, 250, 240, 0.5);
+}
+.hero-particle--pulse {
+  animation: hero-particle-drift 12s linear infinite both,
+    hero-particle-pulse 2.2s ease-in-out infinite;
+  animation-delay: var(--hero-particle-drift-delay, 0s), 0s;
+}
+.hero-particle--pulse:nth-of-type(3n + 2) {
+  animation-delay: var(--hero-particle-drift-delay, 0s), 0.35s;
+}
+.hero-particle--pulse:nth-of-type(3n) {
+  animation-delay: var(--hero-particle-drift-delay, 0s), 0.7s;
+}
+@keyframes hero-particle-pulse {
+  0%, 100% { filter: blur(2px) brightness(1); }
+  50% { filter: blur(2px) brightness(1.45); }
+}
+@keyframes hero-particle-drift {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.9);
+  }
+  6% {
+    opacity: 0.65;
+    transform: translate(-1.5vw, 1.2vh) scale(1);
+  }
+  20% {
+    opacity: 0.7;
+    transform: translate(-5vw, 4vh) scale(1);
+  }
+  40% {
+    opacity: 0.65;
+    transform: translate(-10vw, 8vh) scale(1);
+  }
+  60% {
+    opacity: 0.6;
+    transform: translate(-15vw, 12vh) scale(0.98);
+  }
+  80% {
+    opacity: 0.4;
+    transform: translate(-20vw, 16vh) scale(0.95);
+  }
+  94% {
+    opacity: 0.15;
+    transform: translate(-23vw, 19vh) scale(0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-24vw, 20vh) scale(0.9);
+  }
 }
 
 .page-aurora {
