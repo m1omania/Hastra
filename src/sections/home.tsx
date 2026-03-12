@@ -7,6 +7,7 @@ import type {
   HomeFeatureNarrativeSection,
   HomeFeaturedCaseSection,
   HomeForecastSection,
+  HomeGrowthApproachSection,
   HomeHeroSection,
   HomeIndustriesSection,
   HomePartnersSection,
@@ -25,8 +26,12 @@ import type {
 import { Container } from "@/components/layout/container";
 import { ButtonLink } from "@/components/ui/button-link";
 import { HeroAvatarStageWebGL } from "@/components/ui/hero-avatar-stage-webgl";
+import { HeroContent } from "@/components/ui/hero-content";
 import { HeroLightRays } from "@/components/ui/hero-light-rays";
 import { HeroParticles } from "@/components/ui/hero-particles";
+import { GrowthApproachStack } from "@/components/ui/growth-approach-stack";
+import { PartnerProblemsLadder } from "@/components/ui/partner-problems-ladder";
+import { RevealBlock } from "@/components/ui/reveal-block";
 import { RussiaMapWithMarkers } from "@/components/ui/russia-map-with-markers";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { SurfaceCard } from "@/components/ui/surface-card";
@@ -60,28 +65,36 @@ function HeroInlineLogoRibbon({ logos }: { logos: { name: string; src?: string }
 
 export function HomeHeroSectionView({ section }: { section: HomeHeroSection }) {
   return (
-    <section className="relative overflow-hidden section-space pt-18 pb-16 sm:pt-24 sm:pb-20 lg:pt-28 lg:pb-20 min-h-[92vh] flex items-center">
-      <HeroAvatarStageWebGL className="-z-10" />
-      <HeroLightRays className="z-0" />
-      <HeroParticles className="z-0" />
+    <section className="relative section-space pt-18 pb-16 sm:pt-24 sm:pb-20 lg:pt-28 lg:pb-20 min-h-[100vh] flex items-center">
+      {/* Фиксированный фон на весь экран — блоки ниже будут наезжать при скролле */}
+      <div className="hero-backdrop">
+        <HeroAvatarStageWebGL className="absolute inset-0 -z-10" />
+        <HeroLightRays className="absolute inset-0 z-0" />
+        <HeroParticles className="absolute inset-0 z-0" />
+      </div>
       <Container className="relative z-10">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:gap-12">
-          <div className="max-w-3xl space-y-8 text-left">
-            <h1 className="font-display text-4xl font-semibold lowercase leading-tight tracking-tight text-white sm:text-5xl lg:text-7xl first-letter:uppercase">
-              {section.data.title}
-            </h1>
-            <p className="text-lg leading-relaxed text-white/90 sm:text-xl max-w-2xl">
-              {section.data.description}
-            </p>
-            <div className="flex flex-wrap gap-4 pt-4">
-              <ButtonLink href={section.data.primaryCta.href} intent="primary" className="rounded-xl px-8 py-4 text-base">
-                {section.data.primaryCta.label}
-              </ButtonLink>
-              <ButtonLink href={section.data.secondaryCta.href} intent="secondary" className="rounded-xl px-8 py-4 text-base backdrop-blur-sm bg-white/5 border-white/10">
-                {section.data.secondaryCta.label}
-              </ButtonLink>
+          <HeroContent>
+            <div className="max-w-3xl space-y-8 text-left">
+              <h1
+                data-hero-title
+                className="font-display text-4xl font-semibold lowercase leading-tight tracking-tight text-white sm:text-5xl lg:text-7xl first-letter:uppercase"
+              >
+                {section.data.title}
+              </h1>
+              <p data-hero-desc className="text-lg leading-relaxed text-white/90 sm:text-xl max-w-2xl">
+                {section.data.description}
+              </p>
+              <div data-hero-actions className="flex flex-wrap gap-4 pt-4">
+                <ButtonLink href={section.data.primaryCta.href} intent="primary" className="rounded-xl px-8 py-4 text-base">
+                  {section.data.primaryCta.label}
+                </ButtonLink>
+                <ButtonLink href={section.data.secondaryCta.href} intent="secondary" className="rounded-xl px-8 py-4 text-base backdrop-blur-sm bg-white/5 border-white/10">
+                  {section.data.secondaryCta.label}
+                </ButtonLink>
+              </div>
             </div>
-          </div>
+          </HeroContent>
           <div className="pointer-events-none hidden lg:block h-[500px]" />
         </div>
       </Container>
@@ -110,16 +123,18 @@ export function HomeAgencyOverviewSectionView({
           ))}
         </div>
 
-        <div className="grid gap-5">
-          {section.data.sideNotes.map((note, index) => (
-            <SurfaceCard key={note} className="min-h-44">
-              <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-accent)]">
-                0{index + 1}
-              </p>
-              <p className="mt-4 text-sm leading-7 text-[var(--color-muted)]">{note}</p>
-            </SurfaceCard>
-          ))}
-        </div>
+        <RevealBlock variant="fadeUpStagger" staggerSelector="[data-reveal-item]" staggerDelay={0.1}>
+          <div className="grid gap-5">
+            {section.data.sideNotes.map((note, index) => (
+              <SurfaceCard key={note} className="min-h-44" data-reveal-item>
+                <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-accent)]">
+                  0{index + 1}
+                </p>
+                <p className="mt-4 text-sm leading-7 text-[var(--color-muted)]">{note}</p>
+              </SurfaceCard>
+            ))}
+          </div>
+        </RevealBlock>
       </Container>
     </section>
   );
@@ -610,34 +625,39 @@ export function HomePartnerProblemsSectionView({
 }: {
   section: HomePartnerProblemsSection;
 }) {
+  const allProblems = [...section.data.problemsLeft, ...section.data.problemsRight];
   return (
-    <section id={section.id} className="section-space relative bg-[#1C2338] py-16 md:py-20">
+    <section id={section.id} className="section-space relative py-16 md:py-20">
       <Container className="space-y-10">
         <SectionHeading
           eyebrow={section.data.eyebrow ?? ""}
           title={section.data.title}
-          align="center"
+          align="left"
         />
+        <PartnerProblemsLadder items={allProblems} />
+      </Container>
+    </section>
+  );
+}
 
-        <div className="grid gap-10 md:grid-cols-2 md:gap-12 lg:max-w-4xl lg:mx-auto">
-          <ul className="space-y-4">
-            {section.data.problemsLeft.map((text) => (
-              <li key={text} className="flex items-start gap-3 text-white/95">
-                <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#FBD701]" aria-hidden />
-                <span className="text-sm leading-6 md:text-base">{text}</span>
-              </li>
-            ))}
-          </ul>
-
-          <ul className="space-y-4">
-            {section.data.problemsRight.map((text) => (
-              <li key={text} className="flex items-start gap-3 text-white/95">
-                <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#FBD701]" aria-hidden />
-                <span className="text-sm leading-6 md:text-base">{text}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+export function HomeGrowthApproachSectionView({
+  section,
+}: {
+  section: HomeGrowthApproachSection;
+}) {
+  const { title, subtitle, items } = section.data;
+  return (
+    <section id={section.id} className="section-space">
+      <Container className="space-y-6 text-center pb-12 md:pb-16">
+        <h2 className="font-display text-2xl font-semibold tracking-tight text-white sm:text-3xl lg:text-4xl">
+          {title}
+        </h2>
+        <p className="mx-auto max-w-2xl text-sm leading-7 text-white/80 sm:text-base">
+          {subtitle}
+        </p>
+      </Container>
+      <Container>
+        <GrowthApproachStack items={items} />
       </Container>
     </section>
   );
@@ -917,7 +937,7 @@ export function ServiceCollectionSectionView({
   section: ServiceCollectionSection;
 }) {
   return (
-    <section className="section-space section-bg-white">
+    <section className="section-space section-bg-white section-services">
       <Container className="space-y-10">
         <SectionHeading
           eyebrow={section.data.eyebrow}
@@ -929,7 +949,7 @@ export function ServiceCollectionSectionView({
           {section.data.services.map((service) => (
             <div
               key={service.slug}
-              className="flex h-full flex-col justify-between rounded-2xl border border-neutral-200 bg-neutral-100 p-6 shadow-sm"
+              className="service-card flex h-full flex-col justify-between rounded-2xl border border-neutral-200 bg-neutral-100 p-6 shadow-sm"
             >
               <div>
                 <h3 className="font-display text-xl font-semibold text-[var(--color-primary)]">

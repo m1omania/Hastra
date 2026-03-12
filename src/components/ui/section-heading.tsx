@@ -16,7 +16,7 @@ export function SectionHeading({
   return (
     <div
       className={cn(
-        "max-w-3xl",
+        "section-heading max-w-3xl",
         align === "center" && "mx-auto text-center",
       )}
     >

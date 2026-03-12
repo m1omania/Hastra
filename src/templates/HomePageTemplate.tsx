@@ -1,5 +1,6 @@
 import type { HomePage, HomeSection } from "@/types/content";
 
+import { RevealBlock } from "@/components/ui/reveal-block";
 import {
   HomeAdvantageGridSectionView,
   HomeAgencyOverviewSectionView,
@@ -8,6 +9,7 @@ import {
   HomeFeatureNarrativeSectionView,
   HomeFeaturedCaseSectionView,
   HomeForecastSectionView,
+  HomeGrowthApproachSectionView,
   HomeHeroSectionView,
   HomeIndustriesSectionView,
   HomePartnersSectionView,
@@ -54,6 +56,8 @@ function renderSection(section: HomeSection) {
       return <HomePartnersSectionView key={section.id} section={section} />;
     case "homePartnerProblems":
       return <HomePartnerProblemsSectionView key={section.id} section={section} />;
+    case "homeGrowthApproach":
+      return <HomeGrowthApproachSectionView key={section.id} section={section} />;
     case "homeAdvantageGrid":
       return <HomeAdvantageGridSectionView key={section.id} section={section} />;
     case "homeApproach":
@@ -82,9 +86,29 @@ function renderSection(section: HomeSection) {
 }
 
 export function HomePageTemplate({ page }: { page: HomePage }) {
+  const [firstSection, ...restSections] = page.sections;
   return (
     <main className="min-h-screen relative">
-      {page.sections.map(renderSection)}
+      {firstSection ? renderSection(firstSection) : null}
+      {restSections.length > 0 ? (
+        <div className="blocks-glass relative z-10 flex flex-col gap-y-16 sm:gap-y-20 lg:gap-y-24 px-6 sm:px-10 lg:px-16 xl:px-24">
+          {restSections
+            .filter((section) => section.type !== "homePartners")
+            .map((section) =>
+              section.type === "homeGrowthApproach" ? (
+                <div key={section.id}>
+                  {renderSection(section)}
+                </div>
+              ) : (
+                <RevealBlock key={section.id} variant="fadeUp" start="top 88%">
+                  <div className="rounded-2xl bg-white/[0.26] backdrop-blur-3xl py-10 px-6 sm:py-12 sm:px-8 lg:py-14 lg:px-10">
+                    {renderSection(section)}
+                  </div>
+                </RevealBlock>
+              )
+            )}
+        </div>
+      ) : null}
     </main>
   );
 }

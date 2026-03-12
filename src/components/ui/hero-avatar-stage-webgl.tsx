@@ -657,14 +657,19 @@ export function HeroAvatarStageWebGL({
         camera.position.set(camShakeX, camShakeY, cameraDistance * (2.2 - boostAmount * 0.2));
         camera.lookAt(camShakeX * 0.5, camShakeY * 0.5, 0);
 
-        // Линии скорости от треугольников (стрики): всегда вполовину, при клике — полная активность
-        const streakActivityMult = isBoostingRef.current ? 1.0 : 0.5;
+        // Стрики: в фазе 3 через 2 с выходят на 100%; по клику — сразу 100%
+        const timeInPhase3 = Math.max(0, t - phase3Start);
+        const rampDuration = 2;
+        const rampMult = Math.min(1, timeInPhase3 / rampDuration);
+        const streakActivityMult = isBoostingRef.current ? 1.0 : 0.5 + 0.5 * rampMult;
+
         const updateStreaks = (group: THREE.Group, speedFactor: number) => {
           const streaks = (group as any).streaks as THREE.Mesh[] | undefined;
           if (!streaks) return;
           let adjustedSpeed = Math.max(0.15, speedFactor + boostAmount * 2);
           adjustedSpeed *= streakActivityMult;
-          const streakOpacity = Math.min(0.6, adjustedSpeed * 0.6) * (0.7 + Math.random() * 0.6);
+          const opacityBase = adjustedSpeed * 1.2;
+          const streakOpacity = Math.min(0.75, opacityBase) * (0.7 + Math.random() * 0.6);
           streaks.forEach(s => {
             s.visible = true;
             const mat = s.material as THREE.MeshBasicMaterial;

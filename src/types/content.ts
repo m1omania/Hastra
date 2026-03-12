@@ -284,6 +284,15 @@ export type HomePartnerProblemsSection = SectionBase<
   }
 >;
 
+export type HomeGrowthApproachSection = SectionBase<
+  "homeGrowthApproach",
+  {
+    title: string;
+    subtitle: string;
+    items: { title: string; body: string }[];
+  }
+>;
+
 export type HomeAdvantageGridSection = SectionBase<
   "homeAdvantageGrid",
   {
@@ -466,6 +475,7 @@ export type HomeSection =
   | HomeFeaturedCaseSection
   | HomePartnersSection
   | HomePartnerProblemsSection
+  | HomeGrowthApproachSection
   | HomeAdvantageGridSection
   | HomeApproachSection
   | HomeProblemQuizSection
