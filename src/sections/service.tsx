@@ -20,10 +20,7 @@ export function ServiceHeroSectionView({
       <Container>
         <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--color-accent)]">
-              {section.data.eyebrow}
-            </p>
-            <h1 className="mt-5 max-w-4xl font-display text-5xl font-semibold leading-none tracking-tight text-white sm:text-6xl">
+            <h1 className="max-w-4xl font-display text-5xl font-semibold leading-none tracking-tight text-white sm:text-6xl">
               {section.data.title}
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--color-muted)]">

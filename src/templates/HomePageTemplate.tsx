@@ -95,7 +95,7 @@ export function HomePageTemplate({ page }: { page: HomePage }) {
           {restSections
             .filter((section) => section.type !== "homePartners")
             .map((section) =>
-              section.type === "homeGrowthApproach" ? (
+              section.type === "homeGrowthApproach" || section.type === "homePartnerProblems" ? (
                 <div key={section.id}>
                   {renderSection(section)}
                 </div>

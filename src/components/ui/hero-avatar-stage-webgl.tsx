@@ -21,6 +21,8 @@ interface HeroAvatarStageWebGLProps {
   layoutMode?: "arc" | "circle" | "spiral";
   avatarStagePhase?: AvatarStagePhase;
   className?: string;
+  /** Без фона (прозрачный слой фигур поверх подложки) */
+  transparentBackground?: boolean;
 }
 
 export function HeroAvatarStageWebGL({
@@ -29,6 +31,7 @@ export function HeroAvatarStageWebGL({
   layoutMode = "circle",
   avatarStagePhase,
   className,
+  transparentBackground = false,
 }: HeroAvatarStageWebGLProps) {
   const mountRef = useRef<HTMLDivElement>(null);
   const phaseRef = useRef<AvatarStagePhase | undefined>(undefined);
@@ -314,7 +317,7 @@ export function HeroAvatarStageWebGL({
     };
 
     // Линии скорости (стрики) от треугольников — воздушные, с градиентом и волной
-    const streakWidth = 14;
+    const streakWidth = 32;
     const streakLength = 150;
     const streakGeom = new THREE.PlaneGeometry(streakWidth, streakLength, 2, 28);
     const posAttr = streakGeom.attributes.position;
@@ -359,18 +362,13 @@ export function HeroAvatarStageWebGL({
       v1.set(posAttr.getX(1), posAttr.getY(1), posAttr.getZ(1));
       v2.set(posAttr.getX(2), posAttr.getY(2), posAttr.getZ(2));
       const baseCenter = new THREE.Vector3((v1.x + v2.x) / 2, (v1.y + v2.y) / 2, 0);
-      const pull = 0.32;
-      const p1 = new THREE.Vector3().lerpVectors(v1, baseCenter, pull);
-      const p2 = new THREE.Vector3().lerpVectors(v2, baseCenter, pull);
-      [p1, p2].forEach((v) => {
-        const streakMatInstance = streakMat.clone();
-        if (color) streakMatInstance.color.copy(color);
-        const streak = new THREE.Mesh(streakGeom, streakMatInstance);
-        streak.position.set(v.x, v.y, 0);
-        streak.scale.set(isBig ? 1.4 : 1, 1, 1);
-        planeMesh.add(streak);
-        streaks.push(streak);
-      });
+      const streakMatInstance = streakMat.clone();
+      if (color) streakMatInstance.color.copy(color);
+      const streak = new THREE.Mesh(streakGeom, streakMatInstance);
+      streak.position.set(baseCenter.x, baseCenter.y, 0);
+      streak.scale.set(isBig ? 1.4 : 1, 1, 1);
+      planeMesh.add(streak);
+      streaks.push(streak);
       return streaks;
     };
 
@@ -574,35 +572,8 @@ export function HeroAvatarStageWebGL({
 
             const wobble = getWobble(i * 10, 0.7);
 
-            // --- Логика перестроения (Formation Shuffle) ---
-            const cycleDuration = 10;
-            const transitionDuration = 3.0;
+            // Разлет в круг, без перестроения на третьей фазе — держим фиксированную формацию
             const timeSinceP3 = Math.max(0, t - phase3Start - phase3Duration);
-            // 0: Orbit, 1: V-Shape, 2: Tight Escort
-            const formationCycle = Math.floor(timeSinceP3 / cycleDuration);
-            const formationIndex = formationCycle % 3;
-            const nextFormationIndex = (formationCycle + 1) % 3;
-            const transitionProgress = Math.min(1, (timeSinceP3 % cycleDuration) / transitionDuration);
-            const formationEase = Math.sin((transitionProgress * Math.PI) / 2); // easeOutSine
-
-            const getPosForFormation = (idx: number, fType: number) => {
-              const radius = circleOrbitRadius;
-              const count = itemCount;
-
-              // Всегда используем форму круга, но меняем порядок (индекс)
-              let virtualIdx = idx;
-              if (fType === 1) virtualIdx = (idx + Math.floor(count / 2)) % count; // Сдвиг на полкруга
-              if (fType === 2) virtualIdx = (idx * 3) % count; // Перемешивание
-
-              const angle = (virtualIdx / count) * Math.PI * 2;
-              return new THREE.Vector3(Math.cos(angle) * radius, Math.sin(angle) * radius, 0);
-            };
-
-            const posA = getPosForFormation(i, formationIndex);
-            const posB = getPosForFormation(i, nextFormationIndex);
-            const currentTargetPos = new THREE.Vector3().lerpVectors(posA, posB, formationEase);
-
-            // Разлет (начальный) -> Перестроение (последующее)
             if (timeSinceP3 <= 0) {
               group.position.lerpVectors(
                 new THREE.Vector3(0, 0, 0),
@@ -610,7 +581,7 @@ export function HeroAvatarStageWebGL({
                 ease2
               );
             } else {
-              group.position.copy(currentTargetPos);
+              group.position.set(targetPosition.x, targetPosition.y, 0);
             }
 
             // Добавляем микро-движение
@@ -802,14 +773,18 @@ export function HeroAvatarStageWebGL({
     <div
       ref={mountRef}
       className={className ? `absolute inset-0 w-full h-full overflow-hidden ${className}` : "absolute inset-0 w-full h-full overflow-hidden"}
-      style={{
-        background: `
+      style={
+        transparentBackground
+          ? undefined
+          : {
+              background: `
           radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.4) 0%, transparent 50%),
           radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.4) 0%, transparent 50%),
           radial-gradient(circle at 50% 50%, rgba(124, 58, 237, 0.3) 0%, transparent 70%),
           #1e1b4b
         `
-      }}
+            }
+      }
     />
   );
 }

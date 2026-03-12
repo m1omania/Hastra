@@ -95,9 +95,6 @@ export function CaseGalleryCenterMode({
     <div className="case-gallery-center">
       <div className="case-gallery-center__head">
         <div>
-          {eyebrow && (
-            <p className="case-gallery-center__eyebrow">{eyebrow}</p>
-          )}
           <h2 className="case-gallery-center__title">{title}</h2>
           {description && (
             <p className="case-gallery-center__desc">{description}</p>

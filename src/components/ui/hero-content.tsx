@@ -24,7 +24,9 @@ export function HeroContent({ children }: { children: ReactNode }) {
     if (desc) tl.to(desc, { ...to, delay: 0.15 }, "<");
     if (actions) tl.to(actions, { ...to, delay: 0.15 }, "<");
 
-    return () => tl.kill();
+    return () => {
+      tl.kill();
+    };
   }, []);
 
   return <div ref={ref}>{children}</div>;

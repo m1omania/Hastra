@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import type {
   HomeAdvantageGridSection,
   HomeAgencyOverviewSection,
@@ -27,6 +28,7 @@ import { Container } from "@/components/layout/container";
 import { ButtonLink } from "@/components/ui/button-link";
 import { HeroAvatarStageWebGL } from "@/components/ui/hero-avatar-stage-webgl";
 import { HeroContent } from "@/components/ui/hero-content";
+import { HeroFiguresScroll } from "@/components/ui/hero-figures-scroll";
 import { HeroLightRays } from "@/components/ui/hero-light-rays";
 import { HeroParticles } from "@/components/ui/hero-particles";
 import { GrowthApproachStack } from "@/components/ui/growth-approach-stack";
@@ -63,14 +65,40 @@ function HeroInlineLogoRibbon({ logos }: { logos: { name: string; src?: string }
   );
 }
 
+/** Копия блока с фигурами hero — статичный блок (без fixed, без scroll-анимации). compact: меньшая высота для вставки в блок услуг. */
+export function HeroFiguresBlock({ compact }: { compact?: boolean } = {}) {
+  return (
+    <section
+      className={`relative w-full overflow-hidden ${compact ? "min-h-[380px] bg-transparent" : "min-h-[70vh] flex justify-center"}`}
+      aria-hidden
+    >
+      <div
+        className={`hero-figures-block absolute top-0 bottom-0 w-full ${compact ? "hero-figures-block--no-bg left-1/2 -translate-x-1/2 max-w-4xl" : "left-1/2 -translate-x-1/2 max-w-7xl"}`}
+      >
+        <div className="hero-backdrop__bg absolute inset-0">
+          <HeroLightRays className="absolute inset-0" />
+          {!compact && <HeroParticles className="absolute inset-0" />}
+        </div>
+        <div className="hero-figures absolute inset-0">
+          <HeroAvatarStageWebGL className="absolute inset-0 w-full h-full" transparentBackground />
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function HomeHeroSectionView({ section }: { section: HomeHeroSection }) {
   return (
     <section className="relative section-space pt-18 pb-16 sm:pt-24 sm:pb-20 lg:pt-28 lg:pb-20 min-h-[100vh] flex items-center">
-      {/* Фиксированный фон на весь экран — блоки ниже будут наезжать при скролле */}
+      {/* Один фиксированный контейнер: подложка (лучи, частицы) + слой фигур поверх */}
       <div className="hero-backdrop">
-        <HeroAvatarStageWebGL className="absolute inset-0 -z-10" />
-        <HeroLightRays className="absolute inset-0 z-0" />
-        <HeroParticles className="absolute inset-0 z-0" />
+        <div className="hero-backdrop__bg">
+          <HeroLightRays className="absolute inset-0" />
+          <HeroParticles className="absolute inset-0" />
+        </div>
+        <HeroFiguresScroll>
+          <HeroAvatarStageWebGL className="absolute inset-0 w-full h-full" transparentBackground />
+        </HeroFiguresScroll>
       </div>
       <Container className="relative z-10">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:gap-12">
@@ -629,12 +657,21 @@ export function HomePartnerProblemsSectionView({
   return (
     <section id={section.id} className="section-space relative py-16 md:py-20">
       <Container className="space-y-10">
-        <SectionHeading
-          eyebrow={section.data.eyebrow ?? ""}
-          title={section.data.title}
-          align="left"
-        />
-        <PartnerProblemsLadder items={allProblems} />
+        <RevealBlock variant="fadeUp" start="top 88%">
+          <SectionHeading
+            eyebrow={section.data.eyebrow ?? ""}
+            title={section.data.title}
+            align="center"
+          />
+        </RevealBlock>
+        <RevealBlock
+          variant="fadeUpStagger"
+          staggerSelector=".partner-problems-ladder__cell"
+          staggerDelay={0.06}
+          start="top 88%"
+        >
+          <PartnerProblemsLadder items={allProblems} />
+        </RevealBlock>
       </Container>
     </section>
   );
@@ -937,41 +974,38 @@ export function ServiceCollectionSectionView({
   section: ServiceCollectionSection;
 }) {
   return (
-    <section className="section-space section-bg-white section-services">
-      <Container className="space-y-10">
-        <SectionHeading
-          eyebrow={section.data.eyebrow}
-          title={section.data.title}
-          description={section.data.description}
-        />
-
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {section.data.services.map((service) => (
-            <div
-              key={service.slug}
-              className="service-card flex h-full flex-col justify-between rounded-2xl border border-neutral-200 bg-neutral-100 p-6 shadow-sm"
-            >
-              <div>
-                <h3 className="font-display text-xl font-semibold text-[var(--color-primary)]">
-                  {service.title}
-                </h3>
-                <p className="mt-3 text-sm leading-7 text-neutral-600">
-                  {service.teaser}
-                </p>
-              </div>
-
-              <div className="mt-8">
-                <p className="text-sm font-medium text-[var(--color-primary)]">{service.outcome}</p>
-                <ButtonLink
+    <section className="section-space section-bg-white section-services relative">
+      <Container>
+        <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-12">
+          <SectionHeading
+            eyebrow={section.data.eyebrow}
+            title={section.data.title}
+            description={section.data.description}
+          />
+          <ul className="flex flex-col gap-4">
+            {section.data.services.map((service) => (
+              <li key={service.slug}>
+                <Link
                   href={service.href ?? `/services/${service.slug}`}
-                  intent="primary"
-                  className="mt-4 rounded-lg"
+                  className="service-card-link flex w-full items-center justify-between gap-4 rounded-xl border border-neutral-200 bg-white px-5 py-4 text-left transition-colors hover:border-[var(--color-primary)]/30 hover:bg-neutral-50"
                 >
-                  Подробнее
-                </ButtonLink>
-              </div>
-            </div>
-          ))}
+                  <div className="min-w-0">
+                    <span className="font-display text-lg font-semibold text-[var(--color-primary)]">
+                      {service.title}
+                    </span>
+                    {service.outcome ? (
+                      <p className="mt-1 text-sm text-neutral-600">
+                        {service.outcome}
+                      </p>
+                    ) : null}
+                  </div>
+                  <span className="shrink-0 text-[var(--color-accent)]" aria-hidden>
+                    →
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </Container>
     </section>

@@ -13,10 +13,7 @@ export function CaseHeroSectionView({ section }: { section: CaseHeroSection }) {
     <section className="section-space pt-18 sm:pt-24">
       <Container className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--color-accent)]">
-            {section.data.eyebrow}
-          </p>
-          <p className="mt-5 text-sm uppercase tracking-[0.18em] text-[var(--color-muted)]">
+          <p className="text-sm uppercase tracking-[0.18em] text-[var(--color-muted)]">
             {section.data.client}
           </p>
           <h1 className="mt-4 font-display text-5xl font-semibold leading-none tracking-tight text-white sm:text-6xl">

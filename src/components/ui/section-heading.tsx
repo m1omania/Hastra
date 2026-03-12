@@ -1,14 +1,13 @@
 import { cn } from "@/lib/utils";
 
 interface SectionHeadingProps {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   description?: string;
   align?: "left" | "center";
 }
 
 export function SectionHeading({
-  eyebrow,
   title,
   description,
   align = "left",
@@ -20,9 +19,6 @@ export function SectionHeading({
         align === "center" && "mx-auto text-center",
       )}
     >
-      <p className="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-[var(--color-accent)]">
-        {eyebrow}
-      </p>
       <h2 className="font-display text-3xl font-semibold tracking-tight text-[var(--color-foreground)] sm:text-4xl">
         {title}
       </h2>

@@ -170,16 +170,32 @@ const FLOATS_PER_VERTEX = 10; // pos(3), normal(3), color(4)
 
 /**
  * WebGL: настоящие 3D треугольные призмы (грани, рёбра), центральная + 8 по кругу, стеклянный материал.
+ * smallOnly: только 8 маленьких по кругу, без центрального большого треугольника.
+ * transparentBackground: прозрачный фон канваса (для вставки в светлые/тёмные блоки без чёрного прямоугольника).
  */
-export function HeroTriangleWebGL({ className }: { className?: string }) {
+export function HeroTriangleWebGL({
+  className,
+  smallOnly,
+  transparentBackground,
+  width: widthProp,
+  height: heightProp,
+}: {
+  className?: string;
+  smallOnly?: boolean;
+  transparentBackground?: boolean;
+  width?: number;
+  height?: number;
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const sizeRef = useRef({ width: widthProp, height: heightProp });
+  sizeRef.current = { width: widthProp, height: heightProp };
   const [webglError, setWebglError] = useState<string | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const gl = canvas.getContext("webgl", { alpha: true, depth: true });
+    const gl = canvas.getContext("webgl", { alpha: true, depth: true, preserveDrawingBuffer: false });
     if (!gl) {
       setWebglError("WebGL недоступен");
       return;
@@ -255,9 +271,11 @@ export function HeroTriangleWebGL({ className }: { className?: string }) {
     const lightDirLoc = gl.getUniformLocation(program, "u_lightDir");
 
     const allVertices: number[] = [];
-    const centerSize = 0.38;
-    const centerThick = 0.2;
-    buildPrism(0, 0, centerSize, centerThick, 1, 0.84, 0, 0.6, allVertices);
+    if (!smallOnly) {
+      const centerSize = 0.38;
+      const centerThick = 0.2;
+      buildPrism(0, 0, centerSize, centerThick, 1, 0.84, 0, 0.6, allVertices);
+    }
 
     const numSmall = 8;
     const radius = 0.68;
@@ -321,39 +339,48 @@ export function HeroTriangleWebGL({ className }: { className?: string }) {
       gl.drawArrays(gl.TRIANGLES, 0, allVertices.length / FLOATS_PER_VERTEX);
     }
 
+    const fallbackSize = 300;
     function resize() {
       if (!canvas) return;
       const dpr = Math.min(2, typeof window !== "undefined" ? window.devicePixelRatio : 1);
-      const rect = canvas.getBoundingClientRect();
-      let w = Math.round(rect.width * dpr);
-      let h = Math.round(rect.height * dpr);
-      if (w <= 0 || h <= 0) {
-        w = Math.max(300, canvas.width || 300);
-        h = Math.max(300, canvas.height || 300);
+      const { width: wProp, height: hProp } = sizeRef.current;
+      let w: number;
+      let h: number;
+      if (wProp != null && hProp != null && wProp > 0 && hProp > 0) {
+        w = Math.round(wProp * dpr);
+        h = Math.round(hProp * dpr);
+      } else {
+        const rect = canvas.getBoundingClientRect();
+        w = Math.round(rect.width * dpr);
+        h = Math.round(rect.height * dpr);
+        if (w <= 0 || h <= 0) {
+          w = Math.max(fallbackSize, canvas.width || fallbackSize);
+          h = Math.max(fallbackSize, canvas.height || fallbackSize);
+        }
       }
       if (canvas.width !== w || canvas.height !== h) {
         canvas.width = w;
         canvas.height = h;
-        render();
       }
+      render();
     }
 
     resize();
-    requestAnimationFrame(() => {
-      resize();
-      render();
-    });
+    const rafId = requestAnimationFrame(() => resize());
+    const timeoutId = setTimeout(() => resize(), 200);
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
 
     return () => {
+      clearTimeout(timeoutId);
+      cancelAnimationFrame(rafId);
       ro.disconnect();
       gl.deleteProgram(program);
       gl.deleteShader(vert);
       gl.deleteShader(frag);
       gl.deleteBuffer(posBuf);
     };
-  }, []);
+  }, [smallOnly]);
 
   if (webglError) {
     return (
@@ -370,8 +397,21 @@ export function HeroTriangleWebGL({ className }: { className?: string }) {
   return (
     <canvas
       ref={canvasRef}
+      width={widthProp ?? undefined}
+      height={heightProp ?? undefined}
       className={className}
-      style={{ width: "100%", height: "100%", minWidth: "260px", minHeight: "260px", display: "block", background: "#0d0f1a" }}
+      style={{
+        width: "100%",
+        height: "100%",
+        minWidth: widthProp ?? 260,
+        minHeight: heightProp ?? 260,
+        display: "block",
+        background: transparentBackground
+          ? "transparent"
+          : smallOnly
+            ? "rgba(26, 29, 46, 0.92)"
+            : "#0d0f1a",
+      }}
       aria-hidden
     />
   );
