@@ -716,6 +716,31 @@ a {
     font-size: 1.125rem;
   }
 }
+/* Блок кейсов: сетка 3 — 2 — 3 (последняя ячейка «Смотреть все») */
+.case-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.case-grid__row {
+  display: grid;
+  gap: 1rem;
+}
+.case-grid__row--3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.case-grid__row--2 {
+  grid-template-columns: 2fr 1fr;
+}
+@media (max-width: 767px) {
+  .case-grid__row--3,
+  .case-grid__row--2 {
+    grid-template-columns: 1fr;
+    max-width: none;
+  }
+}
+
 /* Блок кейсов (галерея): заголовок в том же стиле, что и у остальных блоков */
 .blocks-glass .case-gallery-center__eyebrow {
   font-size: 0.75rem;

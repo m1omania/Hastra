@@ -1217,6 +1217,7 @@ export const homePage: HomePage = {
         description:
           "Подборка кейсов по SEO, performance и репутации, где видно конкретный результат в цифрах, а не только обещания роста.",
         cases: caseSummaries,
+        layout: "grid332",
       },
     },
     {

@@ -1,9 +1,12 @@
 import type {
   CaseCollectionSection,
+  CaseSummary,
   FAQSection,
   LeadCaptureSection,
   TestimonialsSection,
 } from "@/types/content";
+
+import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
 import { ButtonLink } from "@/components/ui/button-link";
@@ -11,20 +14,87 @@ import { CaseGalleryCenterMode } from "@/components/ui/case-gallery-center";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { SurfaceCard } from "@/components/ui/surface-card";
 
+/** Карточка кейса для сетки 3-2-3 (тот же контент, что в галерее) */
+function CaseGridCard({ item, className }: { item: CaseSummary; className?: string }) {
+  return (
+    <Link
+      href={item.href ?? `/cases/${item.slug}`}
+      className={`case-grid__card group flex min-h-[220px] flex-col rounded-xl border border-white/10 bg-white/5 p-6 transition hover:border-[var(--color-accent)]/30 hover:bg-white/10 sm:min-h-[250px] ${className ?? ""}`.trim()}
+    >
+      <div>
+        <h3 className="font-display text-lg font-semibold text-white">{item.title}</h3>
+        <p className="mt-2 text-sm leading-6 text-[var(--color-muted)] line-clamp-2">{item.excerpt}</p>
+      </div>
+      <div className="mt-auto flex flex-col gap-2 pt-4">
+        {item.metrics.slice(0, 2).map((m) => (
+          <div key={m.label} className="text-[var(--color-accent)]">
+            <span className="text-lg font-semibold sm:text-xl">{m.value}</span>
+            <span className="ml-1.5 text-xs font-medium opacity-90">{m.label}</span>
+          </div>
+        ))}
+      </div>
+    </Link>
+  );
+}
+
+/** Сетка кейсов: ряд 1 — 3, ряд 2 — 2, ряд 3 — 2 карточки + ячейка «Смотреть все» */
+function CaseCollectionGrid332({ cases }: { cases: CaseSummary[] }) {
+  const list = cases.slice(0, 7);
+  return (
+    <div className="case-grid">
+      <div className="case-grid__row case-grid__row--3">
+        {list.slice(0, 3).map((item) => (
+          <CaseGridCard key={item.slug} item={item} />
+        ))}
+      </div>
+      <div className="case-grid__row case-grid__row--2">
+        {list.slice(3, 5).map((item) => (
+          <CaseGridCard key={item.slug} item={item} />
+        ))}
+      </div>
+      <div className="case-grid__row case-grid__row--3">
+        {list.slice(5, 7).map((item) => (
+          <CaseGridCard key={item.slug} item={item} />
+        ))}
+        <Link
+          href="/cases"
+          className="case-grid__view-all flex min-h-[140px] flex-col items-center justify-center rounded-xl border border-dashed border-white/20 bg-white/5 p-6 text-[var(--color-accent)] transition hover:border-[var(--color-accent)]/50 hover:bg-white/10"
+        >
+          <span className="font-semibold">Смотреть все</span>
+        </Link>
+      </div>
+    </div>
+  );
+}
+
 export function CaseCollectionSectionView({
   section,
 }: {
   section: CaseCollectionSection;
 }) {
+  const isGrid332 = section.data.layout === "grid332";
+
   return (
     <section id={section.id} className="section-space section-bg-white">
-      <Container>
-        <CaseGalleryCenterMode
-          cases={section.data.cases}
-          title={section.data.title}
-          eyebrow={section.data.eyebrow}
-          description={section.data.description}
-        />
+      <Container className={isGrid332 ? "max-w-5xl" : undefined}>
+        {isGrid332 ? (
+          <>
+            <SectionHeading
+              eyebrow={section.data.eyebrow}
+              title={section.data.title}
+              description={section.data.description}
+              align="center"
+            />
+            <CaseCollectionGrid332 cases={section.data.cases} />
+          </>
+        ) : (
+          <CaseGalleryCenterMode
+            cases={section.data.cases}
+            title={section.data.title}
+            eyebrow={section.data.eyebrow}
+            description={section.data.description}
+          />
+        )}
       </Container>
     </section>
   );

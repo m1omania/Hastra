@@ -349,6 +349,8 @@ export type CaseCollectionSection = SectionBase<
     title: string;
     description: string;
     cases: CaseSummary[];
+    /** Раскладка 3-2-3 с последней ячейкой «Смотреть все» (для главной) */
+    layout?: "grid332";
   }
 >;
 
