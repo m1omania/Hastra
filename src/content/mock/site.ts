@@ -1122,7 +1122,7 @@ export const homePage: HomePage = {
         sideTitle: "Hastra Agency",
         sideDescription:
           "От малого бизнеса до крупных компаний: стратегия под KPI и встраивание в вашу экосистему.",
-        primaryCta: { label: "Отправить заявку", href: "#lead", intent: "primary" },
+        primaryCta: { label: "Обсудить проект", href: "#lead", intent: "primary" },
         secondaryCta: { label: "Смотреть кейсы", href: "#cases", intent: "secondary" },
       },
     },
@@ -1459,7 +1459,7 @@ export const homePage: HomePage = {
           "Подберем подходящие digital-инструменты под ваш запрос.",
           "Подготовим следующий шаг для запуска работ.",
         ],
-        primaryCta: { label: "Отправить заявку", href: "#lead", intent: "primary" },
+        primaryCta: { label: "Обсудить проект", href: "#lead", intent: "primary" },
         note: "Этот блок можно подключить к форме WordPress, SmartCaptcha и CRM на следующем этапе.",
       },
     },

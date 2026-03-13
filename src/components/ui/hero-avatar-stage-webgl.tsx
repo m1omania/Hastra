@@ -7,6 +7,14 @@ type Transform = { x: number; y: number; z: number };
 
 const HERO_COLORS = ["#ff3b30", "#38bdf8", "#a78bfa", "#f472b6", "#fbbf24", "#84cc16", "#34d399", "#22d3ee"];
 const CENTER_COLOR = 0xffd700;
+
+/** Увеличивает насыщенность цвета (factor > 1 — ярче, сочнее). */
+function boostSaturation(color: THREE.Color, factor: number) {
+  const hsl = { h: 0, s: 0, l: 0 };
+  color.getHSL(hsl);
+  hsl.s = Math.min(1, hsl.s * factor);
+  color.setHSL(hsl.h, hsl.s, hsl.l);
+}
 const HERO_TRANSFORMS: Transform[] = Array.from({ length: 8 }, (_, i) => {
   const angle = (i / 8) * Math.PI * 2 - Math.PI / 2;
   const r = 420;
@@ -225,7 +233,14 @@ export function HeroAvatarStageWebGL({
       return new THREE.CanvasTexture(canvas);
     };
     const softParticleTexture = createCircleTexture();
-    const palette = colors.map(c => new THREE.Color(c));
+    const palette = colors.map(c => {
+      const col = new THREE.Color(c);
+      boostSaturation(col, 2.5);
+      return col;
+    });
+
+    const centerColorObj = new THREE.Color(CENTER_COLOR);
+    boostSaturation(centerColorObj, 2.5);
 
     // Большой центральный треугольник (крутится вокруг своей оси)
     const centerRadius = coinRadius * 5.0; // Еще больше (было 3.3)
@@ -235,7 +250,7 @@ export function HeroAvatarStageWebGL({
     centerGeometry.rotateZ(Math.PI);
     centerGeometry.scale(1, 1.25, 1); // Тоже чуть меньше
     applyAsymmetry(centerGeometry, 0.25); // Перекос основания
-    const centerLimits = applyGradient(centerGeometry, new THREE.Color(CENTER_COLOR));
+    const centerLimits = applyGradient(centerGeometry, centerColorObj);
 
     const centerGlassMaterial = new THREE.MeshPhysicalMaterial({
       color: 0xffffff,
@@ -246,10 +261,10 @@ export function HeroAvatarStageWebGL({
       transmission: 1.0,
       ior: 1.45,
       thickness: 10,
-      attenuationColor: CENTER_COLOR,
+      attenuationColor: centerColorObj,
       attenuationDistance: 1500, // Увеличил, чтобы свет проходил свободнее
       vertexColors: true,
-      emissive: CENTER_COLOR,
+      emissive: centerColorObj,
       emissiveIntensity: 0.012,
       iridescence: 1.0,
       iridescenceIOR: 1.8,
@@ -365,7 +380,7 @@ export function HeroAvatarStageWebGL({
       return streaks;
     };
 
-    const centerStreaks = createStreaksForGroup(centerTriangleMesh, centerGeometry, true, new THREE.Color(CENTER_COLOR));
+    const centerStreaks = createStreaksForGroup(centerTriangleMesh, centerGeometry, true, centerColorObj);
     (centerGroup as any).streaks = centerStreaks;
 
     for (let i = 0; i < itemCount; i += 1) {
@@ -374,6 +389,7 @@ export function HeroAvatarStageWebGL({
       const escortColor = colors[colorIndex];
 
       const escortColorObj = new THREE.Color(escortColor);
+      boostSaturation(escortColorObj, 2.5);
       const escortGeometry = geometry.clone();
       const escortLimits = applyGradient(escortGeometry, escortColorObj);
 

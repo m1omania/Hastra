@@ -115,10 +115,10 @@ export function HomeHeroSectionView({ section }: { section: HomeHeroSection }) {
                 {section.data.description}
               </p>
               <div data-hero-actions className="flex flex-wrap gap-4 pt-4">
-                <ButtonLink href={section.data.primaryCta.href} intent="primary" className="rounded-xl px-8 py-4 text-base">
+                <ButtonLink href={section.data.primaryCta.href} intent="primary" className="rounded-full px-8 py-4 text-base">
                   {section.data.primaryCta.label}
                 </ButtonLink>
-                <ButtonLink href={section.data.secondaryCta.href} intent="secondary" className="rounded-xl px-8 py-4 text-base backdrop-blur-sm bg-white/5 border-white/10">
+                <ButtonLink href={section.data.secondaryCta.href} intent="secondary" className="rounded-full px-8 py-4 text-base backdrop-blur-sm bg-white/5 border-white/10">
                   {section.data.secondaryCta.label}
                 </ButtonLink>
               </div>
@@ -364,7 +364,7 @@ export function HomeForecastSectionView({
                   ))}
                 </div>
                 <ButtonLink href="#lead" className="mt-6">
-                  Отправить заявку
+                  Обсудить проект
                 </ButtonLink>
               </SurfaceCard>
             </div>
