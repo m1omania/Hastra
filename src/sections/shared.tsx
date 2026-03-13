@@ -19,7 +19,7 @@ function CaseGridCard({ item, className }: { item: CaseSummary; className?: stri
   return (
     <Link
       href={item.href ?? `/cases/${item.slug}`}
-      className={`case-grid__card group flex min-h-[220px] flex-col rounded-xl border border-white/10 bg-white/5 p-6 transition hover:border-[var(--color-accent)]/30 hover:bg-white/10 sm:min-h-[250px] ${className ?? ""}`.trim()}
+      className={`case-grid__card group flex min-h-[220px] flex-col rounded-xl border-0 bg-white/5 p-6 transition sm:min-h-[250px] ${className ?? ""}`.trim()}
     >
       <div>
         <h3 className="font-display text-lg font-semibold text-white">{item.title}</h3>
@@ -58,7 +58,7 @@ function CaseCollectionGrid332({ cases }: { cases: CaseSummary[] }) {
         ))}
         <Link
           href="/cases"
-          className="case-grid__view-all flex min-h-[140px] flex-col items-center justify-center rounded-xl border border-dashed border-white/20 bg-white/5 p-6 text-[var(--color-accent)] transition hover:border-[var(--color-accent)]/50 hover:bg-white/10"
+          className="case-grid__view-all flex min-h-[140px] flex-col items-center justify-center rounded-xl border-0 bg-white/5 p-6 text-[var(--color-accent)] transition"
         >
           <span className="font-semibold">Смотреть все</span>
         </Link>
@@ -75,7 +75,10 @@ export function CaseCollectionSectionView({
   const isGrid332 = section.data.layout === "grid332";
 
   return (
-    <section id={section.id} className="section-space section-bg-white">
+    <section
+      id={section.id}
+      className={`section-space section-bg-white ${isGrid332 ? "section-cases" : ""}`.trim()}
+    >
       <Container className={isGrid332 ? "max-w-5xl" : undefined}>
         {isGrid332 ? (
           <>

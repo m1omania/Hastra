@@ -186,31 +186,24 @@ export function HeroAvatarStageWebGL({
       return { minY, maxY };
     };
 
-
-
     // --- Helper: Прозрачность по градиенту через Shader Injection ---
-    const applyTransparencyFade = (mat: THREE.MeshPhysicalMaterial, limits: { minY: number, maxY: number }) => {
+    const applyTransparencyFade = (mat: THREE.MeshPhysicalMaterial, limits: { minY: number; maxY: number }) => {
       mat.onBeforeCompile = (shader) => {
         shader.uniforms.uFadeLimits = { value: new THREE.Vector2(limits.minY, limits.maxY) };
-        shader.vertexShader = shader.vertexShader.replace(
-          '#include <common>',
-          `#include <common>\nvarying float vFadeY;`
-        ).replace(
-          '#include <begin_vertex>',
-          `#include <begin_vertex>\nvFadeY = position.y;`
-        );
-        shader.fragmentShader = shader.fragmentShader.replace(
-          '#include <common>',
-          `#include <common>\nvarying float vFadeY;\nuniform vec2 uFadeLimits;`
-        ).replace(
-          '#include <output_fragment>',
-          `
+        shader.vertexShader = shader.vertexShader
+          .replace("#include <common>", `#include <common>\nvarying float vFadeY;`)
+          .replace("#include <begin_vertex>", `#include <begin_vertex>\nvFadeY = position.y;`);
+        shader.fragmentShader = shader.fragmentShader
+          .replace("#include <common>", `#include <common>\nvarying float vFadeY;\nuniform vec2 uFadeLimits;`)
+          .replace(
+            "#include <output_fragment>",
+            `
           float fadeFactor = smoothstep(uFadeLimits.x, uFadeLimits.y, vFadeY);
           // Делаем хвост почти невидимым (0.01), а нос полностью плотным
           gl_FragColor.a *= (0.01 + 0.99 * fadeFactor);
           #include <output_fragment>
-          `
-        );
+          `,
+          );
       };
     };
 

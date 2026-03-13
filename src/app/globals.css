@@ -776,48 +776,38 @@ a {
   }
 }
 
-/* Блок Партнёрам: раскладка 4 — 4 — 2, блоки по центру */
-.partner-problems-ladder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
+/* Блок Партнёрам: один текст (предложения через точку, по центру) */
+.partner-problems-panel {
   width: 100%;
-}
-.partner-problems-ladder__row {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  width: 100%;
+  max-width: 100%;
   margin-left: auto;
   margin-right: auto;
 }
-.partner-problems-ladder__cell {
-  flex: 0 0 19%;
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 0.875rem 1rem;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 0.5rem;
-  background: #fff;
-  min-width: 0;
+.partner-problems-ladder {
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 .partner-problems-ladder__text {
-  font-size: 0.875rem;
+  margin: 0;
+  font-size: 2.25rem;
   font-weight: 600;
-  line-height: 1.35;
-  color: #111;
+  line-height: 1.5;
+  color: var(--color-foreground);
+  text-align: center;
   overflow-wrap: break-word;
 }
 @media (min-width: 768px) {
-  .partner-problems-ladder__cell {
-    padding: 1rem 1.25rem;
-  }
   .partner-problems-ladder__text {
-    font-size: 0.9375rem;
+    font-size: 2.5rem;
   }
+}
+
+/* Inline-предложения: по умолчанию жёлтые, GSAP переводит в белый после появления */
+.partner-problems-ladder__sentence {
+  display: inline;
+  color: var(--color-accent);
 }
 
 /* Блок «Как мы решаем задачи роста»: стопка карточек при скролле (как в Med quizstart) */
@@ -936,18 +926,45 @@ a {
 .blocks-glass .logo-marquee {
   background: rgba(232, 236, 239, 0.85);
 }
-/* Блок услуги: без фона у карточек */
+/* Блок услуги: тёмное стекло у карточек */
 .blocks-glass .section-services .service-card,
 .blocks-glass .section-services .service-card-link {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.28);
+  border: none;
   box-shadow: none;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.blocks-glass .section-services .service-card-link:hover {
+  background: rgba(0, 0, 0, 0.38);
+  border: none;
 }
 .blocks-glass .section-services .service-card h3,
 .blocks-glass .section-services .service-card p,
 .blocks-glass .section-services .service-card-link span:not(.shrink-0) {
   color: var(--color-foreground);
 }
+.blocks-glass .section-services .service-card-link .font-display {
+  color: #f8fafc !important;
+}
+
+/* Блок «Наши кейсы»: те же карточки, что у услуг (тёмное стекло, без обводки) */
+.blocks-glass .section-cases .case-grid__card,
+.blocks-glass .section-cases .case-grid__view-all {
+  background: rgba(0, 0, 0, 0.28);
+  border: none;
+  box-shadow: none;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.blocks-glass .section-cases .case-grid__card:hover,
+.blocks-glass .section-cases .case-grid__view-all:hover {
+  background: rgba(0, 0, 0, 0.38);
+}
+.blocks-glass .section-cases .case-grid__card h3 {
+  color: #f8fafc;
+}
+
 .blocks-glass .section-services .service-card-link .shrink-0 {
   color: var(--color-accent);
 }

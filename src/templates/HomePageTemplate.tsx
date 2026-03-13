@@ -1,6 +1,7 @@
 import type { HomePage, HomeSection } from "@/types/content";
 
 import { RevealBlock } from "@/components/ui/reveal-block";
+import { ScrollExpandWidth } from "@/components/ui/scroll-expand-width";
 import {
   HomeAdvantageGridSectionView,
   HomeAgencyOverviewSectionView,
@@ -91,23 +92,41 @@ export function HomePageTemplate({ page }: { page: HomePage }) {
     <main className="min-h-screen relative">
       {firstSection ? renderSection(firstSection) : null}
       {restSections.length > 0 ? (
-        <div className="blocks-glass relative z-10 flex flex-col gap-y-16 sm:gap-y-20 lg:gap-y-24 px-6 sm:px-10 lg:px-16 xl:px-24">
-          {restSections
-            .filter((section) => section.type !== "homePartners")
-            .map((section) =>
-              section.type === "homeGrowthApproach" || section.type === "homePartnerProblems" || section.type === "caseCollection" ? (
-                <div key={section.id}>
+        <ScrollExpandWidth>
+          <div className="blocks-glass relative z-10 flex flex-col gap-y-16 rounded-t-3xl bg-[rgb(15_23_42/0.94)] px-6 py-10 sm:gap-y-20 sm:px-10 sm:py-12 lg:gap-y-24 lg:px-16 lg:py-14 xl:px-24">
+            {restSections.map((section) =>
+            section.type === "homePartners" ? (
+              <div
+                key={section.id}
+                className="-mx-6 overflow-hidden rounded-2xl sm:-mx-10 lg:-mx-16 xl:-mx-24"
+              >
+                {renderSection(section)}
+              </div>
+            ) : section.type === "homePartnerProblems" ? (
+              <div
+                key={section.id}
+                className="-mx-6 sm:-mx-10 lg:-mx-16 xl:-mx-24"
+              >
+                {renderSection(section)}
+              </div>
+            ) : section.type === "homeGrowthApproach" ||
+              section.type === "caseCollection" ||
+              section.type === "serviceCollection" ? (
+              <RevealBlock key={section.id} variant="fadeUp" start="top 88%">
+                <div className="py-10 px-6 sm:py-12 sm:px-8 lg:py-14 lg:px-10">
                   {renderSection(section)}
                 </div>
-              ) : (
-                <RevealBlock key={section.id} variant="fadeUp" start="top 88%">
-                  <div className="rounded-2xl bg-white/[0.26] backdrop-blur-3xl py-10 px-6 sm:py-12 sm:px-8 lg:py-14 lg:px-10">
-                    {renderSection(section)}
-                  </div>
-                </RevealBlock>
-              )
+              </RevealBlock>
+            ) : (
+              <RevealBlock key={section.id} variant="fadeUp" start="top 88%">
+                <div className="py-10 px-6 sm:py-12 sm:px-8 lg:py-14 lg:px-10">
+                  {renderSection(section)}
+                </div>
+              </RevealBlock>
+            )
             )}
-        </div>
+          </div>
+        </ScrollExpandWidth>
       ) : null}
     </main>
   );

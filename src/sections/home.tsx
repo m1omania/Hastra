@@ -33,6 +33,7 @@ import { HeroLightRays } from "@/components/ui/hero-light-rays";
 import { HeroParticles } from "@/components/ui/hero-particles";
 import { GrowthApproachStack } from "@/components/ui/growth-approach-stack";
 import { PartnerProblemsLadder } from "@/components/ui/partner-problems-ladder";
+import { ScrollExpandWidth } from "@/components/ui/scroll-expand-width";
 import { RevealBlock } from "@/components/ui/reveal-block";
 import { RussiaMapWithMarkers } from "@/components/ui/russia-map-with-markers";
 import { SectionHeading } from "@/components/ui/section-heading";
@@ -622,6 +623,14 @@ export function HomePartnersSectionView({
 
   return (
     <section className="pt-8 pb-0">
+      <Container className="pb-6 text-center">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
+          {section.data.eyebrow}
+        </p>
+        <h2 className="mt-2 font-display text-xl font-semibold tracking-tight text-neutral-900 sm:text-2xl">
+          {section.data.title}
+        </h2>
+      </Container>
       <div className="logo-marquee">
         <div className="logo-track">
           {marqueeItems.map((logo, index) => (
@@ -656,23 +665,26 @@ export function HomePartnerProblemsSectionView({
   const allProblems = [...section.data.problemsLeft, ...section.data.problemsRight];
   return (
     <section id={section.id} className="section-space relative py-16 md:py-20">
-      <Container className="space-y-10">
-        <RevealBlock variant="fadeUp" start="top 88%">
-          <SectionHeading
-            eyebrow={section.data.eyebrow ?? ""}
-            title={section.data.title}
-            align="center"
-          />
-        </RevealBlock>
+      <div className="w-full">
         <RevealBlock
           variant="fadeUpStagger"
-          staggerSelector=".partner-problems-ladder__cell"
-          staggerDelay={0.06}
-          start="top 88%"
+          staggerSelector=".partner-problems-ladder__sentence"
+          staggerDelay={0.14}
+          start="top 80%"
+          scrub={0.5}
+          scrubScrollPx={1000}
+          staggerFromColor="var(--color-accent)"
+          staggerToColor="#ffffff"
         >
-          <PartnerProblemsLadder items={allProblems} />
+          <ScrollExpandWidth>
+            <div className="partner-problems-panel rounded-none py-10 sm:py-12 md:py-14">
+              <div className="mx-auto max-w-5xl px-6 sm:px-10 md:px-12">
+                <PartnerProblemsLadder items={allProblems} />
+              </div>
+            </div>
+          </ScrollExpandWidth>
         </RevealBlock>
-      </Container>
+      </div>
     </section>
   );
 }
@@ -987,7 +999,7 @@ export function ServiceCollectionSectionView({
               <li key={service.slug}>
                 <Link
                   href={service.href ?? `/services/${service.slug}`}
-                  className="service-card-link flex w-full items-center justify-between gap-4 rounded-xl border border-neutral-200 bg-white px-5 py-4 text-left transition-colors hover:border-[var(--color-primary)]/30 hover:bg-neutral-50"
+                  className="service-card-link flex w-full items-center justify-between gap-4 rounded-xl border-0 bg-white px-5 py-4 text-left transition-colors hover:bg-neutral-50"
                 >
                   <div className="min-w-0">
                     <span className="font-display text-lg font-semibold text-[var(--color-primary)]">

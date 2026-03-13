@@ -1091,7 +1091,7 @@ export const homePage: HomePage = {
   seo: {
     title: "Digital-агентство Hastra в Москве — маркетинг и реклама под ключ",
     description:
-      "Развиваем бизнес клиентов, используя современные технологии интернет-маркетинга и проверенные решения.",
+      "Развиваем бизнес через digital-маркетинг и проверенные решения.",
   },
   sections: [
     {
@@ -1102,7 +1102,7 @@ export const homePage: HomePage = {
         eyebrow: "5 stars",
         title: "АГЕНТСТВО ИНТЕРНЕТ-МАРКЕТИНГА",
         description:
-          "Развиваем бизнес клиентов, используя современные технологии интернет-маркетинга и проверенные решения.",
+          "Развиваем бизнес через digital-маркетинг и проверенные решения.",
         logos: [
           { name: "03", src: "/clients/03-300x56.webp" },
           { name: "Logo 2", src: "/clients/Logo_2-300x88.webp" },
@@ -1121,27 +1121,9 @@ export const homePage: HomePage = {
           "Нажимая кнопку отправки формы, я даю согласие на обработку персональных данных и подтверждаю ознакомление с политикой обработки персональных данных",
         sideTitle: "Hastra Agency",
         sideDescription:
-          "Нам доверяют проекты от малого до крупного бизнеса. Мы выстраиваем индивидуальную стратегию продвижения и интегрируемся в экосистему бизнеса клиента, чтобы достигать KPI.",
+          "От малого бизнеса до крупных компаний: стратегия под KPI и встраивание в вашу экосистему.",
         primaryCta: { label: "Отправить заявку", href: "#lead", intent: "primary" },
         secondaryCta: { label: "Смотреть кейсы", href: "#cases", intent: "secondary" },
-      },
-    },
-    {
-      id: "home-partners",
-      type: "homePartners",
-      variant: "v1",
-      data: {
-        eyebrow: "Нам доверяют",
-        title: "Нам доверяют",
-        logos: [
-          { name: "03", src: "/clients/03-300x56.webp" },
-          { name: "Logo 2", src: "/clients/Logo_2-300x88.webp" },
-          { name: "Main logo", src: "/clients/MAIN_LOGO-300x276.webp" },
-          { name: "Meta logo", src: "/clients/logo-og-meta-300x300.png" },
-          { name: "Золотой Граммофон", src: "/clients/logo_zg-300x169.webp" },
-          { name: "Петрович", src: "/clients/petrovich-300x66.png" },
-          { name: "Русагро", src: "/clients/rusagrogroup-300x105.webp" },
-        ],
       },
     },
     {
@@ -1479,6 +1461,24 @@ export const homePage: HomePage = {
         ],
         primaryCta: { label: "Отправить заявку", href: "#lead", intent: "primary" },
         note: "Этот блок можно подключить к форме WordPress, SmartCaptcha и CRM на следующем этапе.",
+      },
+    },
+    {
+      id: "home-partners",
+      type: "homePartners",
+      variant: "v1",
+      data: {
+        eyebrow: "Клиенты",
+        title: "Нам доверяют",
+        logos: [
+          { name: "03", src: "/clients/03-300x56.webp" },
+          { name: "Logo 2", src: "/clients/Logo_2-300x88.webp" },
+          { name: "Main logo", src: "/clients/MAIN_LOGO-300x276.webp" },
+          { name: "Meta logo", src: "/clients/logo-og-meta-300x300.png" },
+          { name: "Золотой Граммофон", src: "/clients/logo_zg-300x169.webp" },
+          { name: "Петрович", src: "/clients/petrovich-300x66.png" },
+          { name: "Русагро", src: "/clients/rusagrogroup-300x105.webp" },
+        ],
       },
     },
   ],
