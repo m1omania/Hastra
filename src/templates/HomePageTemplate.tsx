@@ -93,7 +93,7 @@ export function HomePageTemplate({ page }: { page: HomePage }) {
       {firstSection ? renderSection(firstSection) : null}
       {restSections.length > 0 ? (
         <ScrollExpandWidth>
-          <div className="blocks-glass relative z-10 flex flex-col gap-y-16 rounded-t-3xl bg-[rgb(15_23_42/0.94)] px-6 py-10 sm:gap-y-20 sm:px-10 sm:py-12 lg:gap-y-24 lg:px-16 lg:py-14 xl:px-24">
+          <div className="blocks-glass relative z-10 flex flex-col gap-y-16 rounded-t-3xl bg-[rgb(15_23_42/0.94)] backdrop-blur-3xl px-6 py-10 sm:gap-y-20 sm:px-10 sm:py-12 lg:gap-y-24 lg:px-16 lg:py-14 xl:px-24">
             {restSections.map((section) =>
             section.type === "homePartners" ? (
               <div

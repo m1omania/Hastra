@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 
-import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
-import { DynamicDotsBackground } from "@/components/ui/dynamic-dots-background";
+import { HeroParticles } from "@/components/ui/hero-particles";
+import { ParticleLines } from "@/components/ui/particle-lines";
 
 import "./globals.css";
 
@@ -20,15 +20,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className={GeistSans.variable}>
-      <body className="min-h-screen bg-[var(--color-background)] font-sans text-[var(--color-foreground)] antialiased">
-        <div className="page-shell">
-          <DynamicDotsBackground />
-          <div className="page-shell-content">
-            <div className="page-aurora" />
-            <SiteHeader />
-            {children}
-            <SiteFooter />
-          </div>
+      <body className="min-h-screen bg-[var(--color-primary)] font-sans text-white antialiased">
+        <div className="fixed inset-0 z-0">
+          <HeroParticles className="absolute inset-0" />
+          <ParticleLines className="absolute inset-0" />
+        </div>
+        <div className="relative z-10">
+          <SiteHeader />
+          {children}
         </div>
       </body>
     </html>

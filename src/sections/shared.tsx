@@ -19,17 +19,17 @@ function CaseGridCard({ item, className }: { item: CaseSummary; className?: stri
   return (
     <Link
       href={item.href ?? `/cases/${item.slug}`}
-      className={`case-grid__card group flex min-h-[220px] flex-col rounded-xl border-0 bg-white/5 p-6 transition sm:min-h-[250px] ${className ?? ""}`.trim()}
+      className={`case-grid__card group flex min-h-[260px] flex-col rounded-xl border-0 bg-white/5 p-7 transition sm:min-h-[290px] sm:p-8 ${className ?? ""}`.trim()}
     >
       <div>
-        <h3 className="font-display text-lg font-semibold text-white">{item.title}</h3>
-        <p className="mt-2 text-sm leading-6 text-[var(--color-muted)] line-clamp-2">{item.excerpt}</p>
+        <h3 className="font-display text-xl font-semibold text-white sm:text-2xl">{item.title}</h3>
+        <p className="mt-2.5 text-base leading-6 text-[var(--color-muted)] line-clamp-2 sm:text-[1.0625rem]">{item.excerpt}</p>
       </div>
-      <div className="mt-auto flex flex-col gap-2 pt-4">
+      <div className="mt-auto flex flex-col gap-2.5 pt-5">
         {item.metrics.slice(0, 2).map((m) => (
           <div key={m.label} className="text-[var(--color-accent)]">
-            <span className="text-lg font-semibold sm:text-xl">{m.value}</span>
-            <span className="ml-1.5 text-xs font-medium opacity-90">{m.label}</span>
+            <span className="text-xl font-semibold sm:text-2xl">{m.value}</span>
+            <span className="ml-1.5 text-sm font-medium opacity-90">{m.label}</span>
           </div>
         ))}
       </div>
@@ -58,9 +58,9 @@ function CaseCollectionGrid332({ cases }: { cases: CaseSummary[] }) {
         ))}
         <Link
           href="/cases"
-          className="case-grid__view-all flex min-h-[140px] flex-col items-center justify-center rounded-xl border-0 bg-white/5 p-6 text-[var(--color-accent)] transition"
+          className="case-grid__view-all flex min-h-[260px] flex-col items-center justify-center rounded-xl border-0 bg-white/5 p-7 text-[var(--color-accent)] transition sm:min-h-[290px] sm:p-8"
         >
-          <span className="font-semibold">Смотреть все</span>
+          <span className="text-lg font-semibold sm:text-xl">Смотреть все</span>
         </Link>
       </div>
     </div>

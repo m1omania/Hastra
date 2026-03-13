@@ -3,21 +3,14 @@
 @theme inline {
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --color-background: var(--color-background);
-  --color-foreground: var(--color-foreground);
-  --color-surface: var(--color-surface);
-  --color-muted: var(--color-muted);
-  --color-accent: var(--color-accent);
-  --color-accent-strong: var(--color-accent-strong);
-  --color-primary: var(--color-primary);
+  --color-primary: #0c0e4a;
+  --color-accent: #fbd701;
+  --color-accent-strong: #ffe34d;
 }
 
 :root {
-  --color-primary: #1c2338;
-  --color-background: #1c2338;
-  --color-foreground: #ffffff;
-  --color-surface: rgba(255, 255, 255, 0.08);
-  --color-muted: rgba(255, 255, 255, 0.8);
+  --color-primary: #0c0e4a;
+  /* Главный акцентный цвет — жёлтый как в логотипе */
   --color-accent: #fbd701;
   --color-accent-strong: #ffe34d;
 }
@@ -218,6 +211,48 @@ a {
   0%, 100% { filter: blur(2px) brightness(1); }
   50% { filter: blur(2px) brightness(1.45); }
 }
+
+/* Разноцветные светящиеся линии: прерывистые, цвет бежит вдоль луча */
+.particle-lines-origin {
+  position: absolute;
+}
+.particle-line {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: var(--particle-line-length, 40vh);
+  height: var(--particle-line-width, 2px);
+  transform-origin: left center;
+  transform: rotate(var(--particle-line-angle, 0deg));
+  /* Прерывистый луч: повторяющиеся сегменты цвет–просвет */
+  background-image: repeating-linear-gradient(
+    to right,
+    transparent 0,
+    transparent 45%,
+    var(--particle-line-color) 45%,
+    var(--particle-line-color) 55%,
+    transparent 55%,
+    transparent 100%
+  );
+  background-size: 60px 100%;
+  background-repeat: repeat-x;
+  background-position: 0 0;
+  /* Концы луча уходят в прозрачность */
+  mask-image: linear-gradient(to right, black 0%, black 60%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 0%, black 60%, transparent 100%);
+  mask-size: 100% 100%;
+  -webkit-mask-size: 100% 100%;
+  filter: blur(1px);
+  box-shadow: 0 0 6px var(--particle-line-color);
+  animation: particle-line-flow 1.8s linear infinite;
+  animation-delay: var(--particle-line-delay, 0s);
+  opacity: 0.9;
+}
+@keyframes particle-line-flow {
+  0% { background-position: 0 0; }
+  100% { background-position: 60px 0; }
+}
+
 @keyframes hero-particle-drift {
   0% {
     opacity: 0;
@@ -720,12 +755,12 @@ a {
 .case-grid {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem;
   margin-top: 2rem;
 }
 .case-grid__row {
   display: grid;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 .case-grid__row--3 {
   grid-template-columns: repeat(3, 1fr);
