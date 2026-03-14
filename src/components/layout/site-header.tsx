@@ -14,7 +14,7 @@ const navigation = [
 
 export function SiteHeader() {
   return (
-    <header className="absolute top-0 left-0 right-0 z-40 border-b border-white/5 bg-white/5 backdrop-blur-md">
+    <header className="fixed top-0 left-0 right-0 z-40 border-b border-white/5 bg-white/5 backdrop-blur-md">
       <Container className="flex min-h-16 items-center justify-between gap-6">
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center">
@@ -29,7 +29,7 @@ export function SiteHeader() {
           </Link>
           <nav className="hidden items-center gap-6 text-sm text-white lg:flex">
           {navigation.map((item) => (
-            <Link key={item.href} href={item.href} className="transition hover:text-[var(--color-accent)]">
+            <Link key={item.href} href={item.href} className="font-semibold transition hover:text-[var(--color-accent)]">
               {item.label}
             </Link>
           ))}
@@ -37,9 +37,9 @@ export function SiteHeader() {
         </div>
 
         <div className="hidden items-center gap-6 lg:flex">
-          <span className="text-sm text-white/90">8 (800) 333-13-49</span>
+          <span className="text-sm font-semibold text-white/90">8 (800) 333-13-49</span>
           <ButtonLink href="#lead" intent="primary" className="rounded-full">
-            Отправить заявку
+            Обсудить проект
           </ButtonLink>
         </div>
       </Container>

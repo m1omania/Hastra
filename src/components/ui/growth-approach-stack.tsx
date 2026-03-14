@@ -6,17 +6,22 @@ import { useEffect, useRef, useState } from "react";
  * Стопка карточек при скролле — как в Med (quizstart.vue): список с sticky и разными top/z-index,
  * между карточками margin, без обёртки и без спейсера.
  */
-const STICKY_TOPS = ["top-6 md:top-8", "top-14 md:top-16", "top-20 md:top-24", "top-28 md:top-32"];
-const Z_INDICES = ["z-10", "z-20", "z-30", "z-40"];
+const STICKY_TOP_BASE_REM = 16;
+const STICKY_TOP_STEP_REM = 2.5;
 
 export function GrowthApproachStack({
   items,
 }: {
   items: { title: string; body: string }[];
 }) {
-  const list = items.slice(0, 4);
+  const list = items;
   const refs = useRef<(HTMLLIElement | null)[]>([]);
   const [scales, setScales] = useState<number[]>(() => list.map(() => 1));
+
+  const getStickyTop = (index: number) => {
+    const rem = STICKY_TOP_BASE_REM + index * STICKY_TOP_STEP_REM;
+    return `${rem}rem`;
+  };
 
   useEffect(() => {
     const cards = refs.current;
@@ -63,11 +68,11 @@ export function GrowthApproachStack({
           ref={(el) => {
             refs.current[i] = el;
           }}
-          className={`growth-approach-stack__card sticky origin-top min-h-[14rem] flex flex-col justify-center transition-transform duration-200 ${STICKY_TOPS[i]} ${Z_INDICES[i]} ${i > 0 ? "mt-6" : ""} ${i === list.length - 1 ? "pb-8" : ""}`}
-          style={{ transform: `scale(${scales[i]})` }}
+          className={`growth-approach-stack__card sticky origin-top min-h-[14rem] flex flex-col justify-center transition-transform duration-200 ${i > 0 ? "mt-6" : ""} ${i === list.length - 1 ? "pb-8" : ""}`}
+          style={{ transform: `scale(${scales[i]})`, top: getStickyTop(i), zIndex: 10 + Math.min(i, 8) }}
         >
+          <span className="growth-approach-stack__card-index">{String(i + 1).padStart(2, "0")}</span>
           <h3 className="growth-approach-stack__card-title">{item.title}</h3>
-          <span className="growth-approach-stack__card-line" aria-hidden />
           <p className="growth-approach-stack__card-body">{item.body}</p>
         </li>
       ))}

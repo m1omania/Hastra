@@ -29,7 +29,6 @@ import { ButtonLink } from "@/components/ui/button-link";
 import { HeroAvatarStageWebGL } from "@/components/ui/hero-avatar-stage-webgl";
 import { HeroContent } from "@/components/ui/hero-content";
 import { HeroFiguresScroll } from "@/components/ui/hero-figures-scroll";
-import { HeroLightRays } from "@/components/ui/hero-light-rays";
 import { HeroParticles } from "@/components/ui/hero-particles";
 import { GrowthApproachStack } from "@/components/ui/growth-approach-stack";
 import { PartnerProblemsLadder } from "@/components/ui/partner-problems-ladder";
@@ -77,7 +76,6 @@ export function HeroFiguresBlock({ compact }: { compact?: boolean } = {}) {
         className={`hero-figures-block absolute top-0 bottom-0 w-full ${compact ? "hero-figures-block--no-bg left-1/2 -translate-x-1/2 max-w-4xl" : "left-1/2 -translate-x-1/2 max-w-7xl"}`}
       >
         <div className="hero-backdrop__bg absolute inset-0">
-          <HeroLightRays className="absolute inset-0" />
           {!compact && <HeroParticles className="absolute inset-0" />}
         </div>
         <div className="hero-figures absolute inset-0">
@@ -94,7 +92,6 @@ export function HomeHeroSectionView({ section }: { section: HomeHeroSection }) {
       {/* Один фиксированный контейнер: подложка (лучи, частицы) + слой фигур поверх */}
       <div className="hero-backdrop">
         <div className="hero-backdrop__bg">
-          <HeroLightRays className="absolute inset-0" />
           <HeroParticles className="absolute inset-0" />
         </div>
         <HeroFiguresScroll>
@@ -115,10 +112,10 @@ export function HomeHeroSectionView({ section }: { section: HomeHeroSection }) {
                 {section.data.description}
               </p>
               <div data-hero-actions className="flex flex-wrap gap-4 pt-4">
-                <ButtonLink href={section.data.primaryCta.href} intent="primary" className="rounded-xl px-8 py-4 text-base">
+                <ButtonLink href={section.data.primaryCta.href} intent="primary" className="rounded-full px-8 py-4 text-base">
                   {section.data.primaryCta.label}
                 </ButtonLink>
-                <ButtonLink href={section.data.secondaryCta.href} intent="secondary" className="rounded-xl px-8 py-4 text-base backdrop-blur-sm bg-white/5 border-white/10">
+                <ButtonLink href={section.data.secondaryCta.href} intent="secondary" className="rounded-full px-8 py-4 text-base backdrop-blur-sm bg-white/5 border-white/10">
                   {section.data.secondaryCta.label}
                 </ButtonLink>
               </div>
@@ -364,7 +361,7 @@ export function HomeForecastSectionView({
                   ))}
                 </div>
                 <ButtonLink href="#lead" className="mt-6">
-                  Отправить заявку
+                  Обсудить проект
                 </ButtonLink>
               </SurfaceCard>
             </div>
@@ -679,6 +676,9 @@ export function HomePartnerProblemsSectionView({
           <ScrollExpandWidth>
             <div className="partner-problems-panel rounded-none py-10 sm:py-12 md:py-14">
               <div className="mx-auto max-w-5xl px-6 sm:px-10 md:px-12">
+                <h2 className="mb-6 text-center text-[18px] font-semibold uppercase tracking-[0.24em] text-[var(--color-accent)] sm:mb-8">
+                  Проблемы клиентов
+                </h2>
                 <PartnerProblemsLadder items={allProblems} />
               </div>
             </div>
@@ -696,15 +696,17 @@ export function HomeGrowthApproachSectionView({
 }) {
   const { title, subtitle, items } = section.data;
   return (
-    <section id={section.id} className="section-space">
-      <Container className="space-y-6 text-center pb-12 md:pb-16">
-        <h2 className="font-display text-2xl font-semibold tracking-tight text-white sm:text-3xl lg:text-4xl">
-          {title}
-        </h2>
-        <p className="mx-auto max-w-2xl text-sm leading-7 text-white/80 sm:text-base">
-          {subtitle}
-        </p>
-      </Container>
+    <section id={section.id} className="section-space growth-approach-section">
+      <div className="sticky top-20 z-30 md:top-24">
+        <Container className="space-y-6 text-center pb-12 md:pb-16">
+          <h2 className="font-display text-2xl font-semibold tracking-tight text-white sm:text-3xl lg:text-4xl">
+            {title}
+          </h2>
+          <p className="mx-auto max-w-2xl text-sm leading-7 text-white/80 sm:text-base">
+            {subtitle}
+          </p>
+        </Container>
+      </div>
       <Container>
         <GrowthApproachStack items={items} />
       </Container>
@@ -985,40 +987,69 @@ export function ServiceCollectionSectionView({
 }: {
   section: ServiceCollectionSection;
 }) {
+  const services = section.data.services.slice(0, 6);
+  const iconPaths = [
+    "M11 5h8m-8 4h8m-8 4h5M5 6.5l1.5 1.5L9 5.5M5 12.5l1.5 1.5L9 11.5M5 18.5l1.5 1.5L9 17.5",
+    "M12 3l7.5 4.2v9.6L12 21l-7.5-4.2V7.2L12 3zm0 0v18m7.5-13.8L12 11.4 4.5 7.2",
+    "M4 12h16M12 4l8 8-8 8",
+    "M4 20l5.5-5.5m0 0a4 4 0 105.7-5.7 4 4 0 00-5.7 5.7z",
+    "M5 19V9m7 10V5m7 14v-7",
+    "M12 3l9 4.5-9 4.5-9-4.5L12 3zm0 9v9m-5-6l5 2.5 5-2.5",
+  ] as const;
+  const serviceGradientColors = [
+    ["255", "59", "48"],
+    ["56", "189", "248"],
+    ["167", "139", "250"],
+    ["244", "114", "182"],
+    ["251", "191", "36"],
+    ["132", "204", "22"],
+  ] as const;
   return (
     <section className="section-space section-bg-white section-services relative">
-      <Container>
-        <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-12">
-          <SectionHeading
-            eyebrow={section.data.eyebrow}
-            title={section.data.title}
-            description={section.data.description}
-          />
-          <ul className="flex flex-col gap-4">
-            {section.data.services.map((service) => (
-              <li key={service.slug}>
+      <Container className="space-y-10">
+        <div className="mx-auto max-w-4xl space-y-4 text-center">
+          <h2 className="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            {section.data.title}
+          </h2>
+          <p className="text-base leading-8 text-[var(--color-muted)]">
+            {section.data.description}
+          </p>
+        </div>
+        <RevealBlock variant="fadeUpStagger" staggerSelector="[data-service-card]" staggerDelay={0.12} start="top 86%">
+          <ul className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {services.map((service, index) => (
+              <li key={service.slug} className="h-full" data-service-card>
                 <Link
                   href={service.href ?? `/services/${service.slug}`}
-                  className="service-card-link flex w-full items-center justify-between gap-4 rounded-xl border-0 bg-white px-5 py-4 text-left transition-colors hover:bg-neutral-50"
+                className="service-card-link service-card service-card-gradient group flex h-full flex-col items-start rounded-2xl border-0 bg-white p-6 text-left transition-transform transition-colors duration-300 ease-out hover:scale-[1.02] hover:bg-neutral-50"
+                style={
+                  {
+                    "--service-grad-start-rgb": serviceGradientColors[index % serviceGradientColors.length].join(", "),
+                    "--service-grad-end-rgb": serviceGradientColors[(index + 2) % serviceGradientColors.length].join(", "),
+                  } as React.CSSProperties
+                }
                 >
-                  <div className="min-w-0">
-                    <span className="font-display text-lg font-semibold text-[var(--color-primary)]">
-                      {service.title}
-                    </span>
-                    {service.outcome ? (
-                      <p className="mt-1 text-sm text-neutral-600">
-                        {service.outcome}
-                      </p>
-                    ) : null}
-                  </div>
-                  <span className="shrink-0 text-[var(--color-accent)]" aria-hidden>
+                  <span className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-full border border-[var(--color-accent)] bg-[var(--color-accent)] text-[#111]" aria-hidden>
+                    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+                      <path d={iconPaths[index % iconPaths.length]} />
+                    </svg>
+                  </span>
+                  <h3 className="font-display text-xl font-semibold text-[#111]">
+                    {service.title}
+                  </h3>
+                  {(service.outcome || service.teaser) ? (
+                    <p className="mt-3 text-sm leading-7 text-[#333]">
+                      {service.outcome ?? service.teaser}
+                    </p>
+                  ) : null}
+                  <span className="mt-auto pt-5 inline-flex text-2xl leading-none text-[var(--color-accent)] transition-transform duration-300 ease-out group-hover:translate-x-1" aria-hidden>
                     →
                   </span>
                 </Link>
               </li>
             ))}
           </ul>
-        </div>
+        </RevealBlock>
       </Container>
     </section>
   );

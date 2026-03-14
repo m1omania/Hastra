@@ -19,19 +19,21 @@ function CaseGridCard({ item, className }: { item: CaseSummary; className?: stri
   return (
     <Link
       href={item.href ?? `/cases/${item.slug}`}
-      className={`case-grid__card group flex min-h-[260px] flex-col rounded-xl border-0 bg-white/5 p-7 transition sm:min-h-[290px] sm:p-8 ${className ?? ""}`.trim()}
+      className={`case-grid__card group flex min-h-[320px] flex-col overflow-hidden rounded-2xl border-0 bg-white p-0 transition-transform duration-300 ease-out hover:scale-[1.02] sm:min-h-[360px] ${className ?? ""}`.trim()}
     >
-      <div>
-        <h3 className="font-display text-xl font-semibold text-white sm:text-2xl">{item.title}</h3>
-        <p className="mt-2.5 text-base leading-6 text-[var(--color-muted)] line-clamp-2 sm:text-[1.0625rem]">{item.excerpt}</p>
+      <div className="flex-1 bg-white p-8 sm:p-9">
+        <h3 className="font-display text-xl font-semibold text-[#111]">{item.title}</h3>
+        <p className="mt-3 text-sm leading-7 text-[#333] line-clamp-3">{item.excerpt}</p>
       </div>
-      <div className="mt-auto flex flex-col gap-2.5 pt-5">
+      <div className="mt-auto w-full bg-[var(--color-primary)] px-8 py-6 sm:px-9 min-h-[130px] sm:min-h-[140px]">
+        <div className="flex h-full flex-col justify-center gap-2.5">
         {item.metrics.slice(0, 2).map((m) => (
           <div key={m.label} className="text-[var(--color-accent)]">
-            <span className="text-xl font-semibold sm:text-2xl">{m.value}</span>
-            <span className="ml-1.5 text-sm font-medium opacity-90">{m.label}</span>
+            <span className="text-2xl font-semibold sm:text-[1.8rem]">{m.value}</span>
+            <span className="ml-1.5 text-sm font-medium text-white/90">{m.label}</span>
           </div>
         ))}
+        </div>
       </div>
     </Link>
   );
@@ -58,9 +60,12 @@ function CaseCollectionGrid332({ cases }: { cases: CaseSummary[] }) {
         ))}
         <Link
           href="/cases"
-          className="case-grid__view-all flex min-h-[260px] flex-col items-center justify-center rounded-xl border-0 bg-white/5 p-7 text-[var(--color-accent)] transition sm:min-h-[290px] sm:p-8"
+          className="case-grid__view-all group flex min-h-[320px] flex-col items-center justify-center rounded-2xl border border-black/10 bg-white p-8 text-black transition-transform transition-colors duration-300 ease-out hover:scale-[1.02] hover:bg-neutral-50 sm:min-h-[360px] sm:p-9"
         >
-          <span className="text-lg font-semibold sm:text-xl">Смотреть все</span>
+          <span className="font-display text-xl font-semibold text-[#111]">Смотреть все</span>
+          <span className="mt-3 inline-flex text-2xl leading-none text-[var(--color-accent)] transition-transform duration-300 ease-out group-hover:translate-x-1" aria-hidden>
+            →
+          </span>
         </Link>
       </div>
     </div>
@@ -79,7 +84,7 @@ export function CaseCollectionSectionView({
       id={section.id}
       className={`section-space section-bg-white ${isGrid332 ? "section-cases" : ""}`.trim()}
     >
-      <Container className={isGrid332 ? "max-w-5xl" : undefined}>
+      <Container>
         {isGrid332 ? (
           <>
             <SectionHeading

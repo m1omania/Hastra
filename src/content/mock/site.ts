@@ -1091,7 +1091,7 @@ export const homePage: HomePage = {
   seo: {
     title: "Digital-агентство Hastra в Москве — маркетинг и реклама под ключ",
     description:
-      "Развиваем бизнес через digital-маркетинг и проверенные решения.",
+      "Развиваем бизнес клиентов через интернет-маркетинг и проверенные решения.",
   },
   sections: [
     {
@@ -1102,7 +1102,7 @@ export const homePage: HomePage = {
         eyebrow: "5 stars",
         title: "АГЕНТСТВО ИНТЕРНЕТ-МАРКЕТИНГА",
         description:
-          "Развиваем бизнес через digital-маркетинг и проверенные решения.",
+          "Развиваем бизнес клиентов через интернет-маркетинг и проверенные решения.",
         logos: [
           { name: "03", src: "/clients/03-300x56.webp" },
           { name: "Logo 2", src: "/clients/Logo_2-300x88.webp" },
@@ -1122,7 +1122,7 @@ export const homePage: HomePage = {
         sideTitle: "Hastra Agency",
         sideDescription:
           "От малого бизнеса до крупных компаний: стратегия под KPI и встраивание в вашу экосистему.",
-        primaryCta: { label: "Отправить заявку", href: "#lead", intent: "primary" },
+        primaryCta: { label: "Обсудить проект", href: "#lead", intent: "primary" },
         secondaryCta: { label: "Смотреть кейсы", href: "#cases", intent: "secondary" },
       },
     },
@@ -1459,7 +1459,7 @@ export const homePage: HomePage = {
           "Подберем подходящие digital-инструменты под ваш запрос.",
           "Подготовим следующий шаг для запуска работ.",
         ],
-        primaryCta: { label: "Отправить заявку", href: "#lead", intent: "primary" },
+        primaryCta: { label: "Обсудить проект", href: "#lead", intent: "primary" },
         note: "Этот блок можно подключить к форме WordPress, SmartCaptcha и CRM на следующем этапе.",
       },
     },
