@@ -2,6 +2,8 @@ import type {
   CaseCollectionSection,
   CaseSummary,
   FAQSection,
+  HomeAboutCompanySection,
+  HomeFaqSection,
   LeadCaptureSection,
   TestimonialsSection,
 } from "@/types/content";
@@ -15,6 +17,7 @@ import { CaseGalleryCenterMode } from "@/components/ui/case-gallery-center";
 import { RevealBlock } from "@/components/ui/reveal-block";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { SurfaceCard } from "@/components/ui/surface-card";
+import { FaqAccordion } from "@/components/ui/faq-accordion";
 import { TestimonialsSliderWithHeader } from "@/components/ui/testimonials-slider";
 
 /** Карточка кейса для сетки 3-2-3 (тот же контент, что в галерее) */
@@ -138,6 +141,50 @@ export function CaseCollectionSectionView({
   );
 }
 
+export function AboutCompanySectionView({
+  section,
+}: {
+  section: HomeAboutCompanySection;
+}) {
+  return (
+    <section id={section.id} className="section-space section-bg-white">
+      <Container className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
+          <div className="section-heading">
+            <h2>{section.data.title}</h2>
+          </div>
+          {section.data.paragraphs.map((p) => (
+            <p key={p.slice(0, 40)} className="text-sm leading-8 text-[var(--color-muted)] sm:text-base">
+              {p}
+            </p>
+          ))}
+        </div>
+        <div className="space-y-5">
+          {section.data.approachItems.map((item, index) => (
+            <div
+              key={item.title}
+              className="min-h-44 rounded-2xl bg-[#0C0E4A] p-6"
+            >
+              <span
+                className="inline-flex items-center justify-center rounded-full bg-[var(--color-accent)] px-3 py-1.5 text-sm font-bold text-[#1c2338]"
+                aria-hidden
+              >
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <h4 className="mt-3 text-base font-semibold text-white sm:text-lg">
+                {item.title}
+              </h4>
+              <p className="mt-2 text-sm leading-7 text-white/80">
+                {item.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </section>
+  );
+}
+
 export function TestimonialsSectionView({
   section,
 }: {
@@ -152,6 +199,21 @@ export function TestimonialsSectionView({
           reviews={section.data.reviews}
         />
       </Container>
+    </section>
+  );
+}
+
+export function HomeFaqSectionView({ section }: { section: HomeFaqSection }) {
+  return (
+    <section id={section.id} className="section-space">
+      <div className="mx-auto w-full max-w-7xl px-6 lg:px-10">
+        <div className="space-y-8 rounded-[1.5rem] bg-white px-6 py-8 shadow-sm sm:px-8 sm:py-10 lg:px-10">
+          <h2 className="font-display text-3xl font-semibold tracking-tight text-[#111] sm:text-4xl">
+            {section.data.title}
+          </h2>
+          <FaqAccordion items={section.data.items} />
+        </div>
+      </div>
     </section>
   );
 }

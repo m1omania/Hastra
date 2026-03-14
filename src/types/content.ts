@@ -354,6 +354,25 @@ export type CaseCollectionSection = SectionBase<
   }
 >;
 
+export type HomeAboutCompanySection = SectionBase<
+  "homeAboutCompany",
+  {
+    title: string;
+    paragraphs: string[];
+    approachTitle: string;
+    approachItems: IconTextItem[];
+  }
+>;
+
+export type HomeAdvantagesWorkSection = SectionBase<
+  "homeAdvantagesWork",
+  {
+    title: string;
+    description: string;
+    items: IconTextItem[];
+  }
+>;
+
 export type TestimonialsSection = SectionBase<
   "testimonials",
   {
@@ -404,6 +423,31 @@ export type ProcessSection = SectionBase<
     title: string;
     description: string;
     steps: ProcessStep[];
+  }
+>;
+
+export type HomeFaqSection = SectionBase<
+  "homeFaq",
+  {
+    title: string;
+    items: FAQItem[];
+  }
+>;
+
+export type HomeFocusCardSection = SectionBase<
+  "homeFocusCard",
+  {
+    index: string;
+    title: string;
+    body: string;
+  }
+>;
+
+export type HomeFocusTextPanelSection = SectionBase<
+  "homeFocusTextPanel",
+  {
+    number: string;
+    lines: { text: string; bold?: boolean }[];
   }
 >;
 
@@ -467,6 +511,8 @@ export type CaseResultsSection = SectionBase<
 export type HomeSection =
   | HomeHeroSection
   | HomeAgencyOverviewSection
+  | HomeAboutCompanySection
+  | HomeAdvantagesWorkSection
   | HomeSeoIntroSection
   | HomeReasonsSection
   | HomeForecastSection
@@ -488,6 +534,9 @@ export type HomeSection =
   | ServiceCollectionSection
   | CaseCollectionSection
   | TestimonialsSection
+  | HomeFaqSection
+  | HomeFocusCardSection
+  | HomeFocusTextPanelSection
   | LeadCaptureSection;
 
 export type ServiceSection =

@@ -5,7 +5,7 @@ import { buildMetadata } from "@/lib/seo";
 import { HomePageTemplate } from "@/templates/HomePageTemplate";
 
 const page = getHomePage();
-const visibleSectionTypes = new Set(["homeHero", "homePartnerProblems", "homeGrowthApproach", "serviceCollection", "caseCollection", "testimonials"]);
+const visibleSectionTypes = new Set(["homeHero", "homeGrowthApproach", "homeFocusTextPanel", "serviceCollection", "caseCollection", "testimonials", "homeAboutCompany", "homeFaq", "homeProblemQuiz"]);
 const pageWithHeroProblemsAndSolutions = {
   ...page,
   sections: page.sections.filter((section) => visibleSectionTypes.has(section.type)),

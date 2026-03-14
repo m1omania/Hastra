@@ -4,12 +4,15 @@ import { RevealBlock } from "@/components/ui/reveal-block";
 import { ScrollExpandWidth } from "@/components/ui/scroll-expand-width";
 import {
   HomeAdvantageGridSectionView,
+  HomeAdvantagesWorkSectionView,
   HomeAgencyOverviewSectionView,
   HomeApproachSectionView,
   HomeCitiesSectionView,
   HomeFeatureNarrativeSectionView,
   HomeFeaturedCaseSectionView,
   HomeForecastSectionView,
+  HomeFocusCardSectionView,
+  HomeFocusTextPanelSectionView,
   HomeGrowthApproachSectionView,
   HomeHeroSectionView,
   HomeIndustriesSectionView,
@@ -26,7 +29,9 @@ import {
   HomeCostItemsSectionView,
 } from "@/sections/home";
 import {
+  AboutCompanySectionView,
   CaseCollectionSectionView,
+  HomeFaqSectionView,
   LeadCaptureSectionView,
   TestimonialsSectionView,
 } from "@/sections/shared";
@@ -37,6 +42,8 @@ function renderSection(section: HomeSection) {
       return <HomeHeroSectionView key={section.id} section={section} />;
     case "homeAgencyOverview":
       return <HomeAgencyOverviewSectionView key={section.id} section={section} />;
+    case "homeAboutCompany":
+      return <AboutCompanySectionView key={section.id} section={section} />;
     case "homeSeoIntro":
       return <HomeSeoIntroSectionView key={section.id} section={section} />;
     case "homeReasons":
@@ -59,8 +66,14 @@ function renderSection(section: HomeSection) {
       return <HomePartnerProblemsSectionView key={section.id} section={section} />;
     case "homeGrowthApproach":
       return <HomeGrowthApproachSectionView key={section.id} section={section} />;
+    case "homeFocusCard":
+      return <HomeFocusCardSectionView key={section.id} section={section} />;
+    case "homeFocusTextPanel":
+      return <HomeFocusTextPanelSectionView key={section.id} section={section} />;
     case "homeAdvantageGrid":
       return <HomeAdvantageGridSectionView key={section.id} section={section} />;
+    case "homeAdvantagesWork":
+      return <HomeAdvantagesWorkSectionView key={section.id} section={section} />;
     case "homeApproach":
       return <HomeApproachSectionView key={section.id} section={section} />;
     case "homeProblemQuiz":
@@ -79,6 +92,8 @@ function renderSection(section: HomeSection) {
       return <CaseCollectionSectionView key={section.id} section={section} />;
     case "testimonials":
       return <TestimonialsSectionView key={section.id} section={section} />;
+    case "homeFaq":
+      return <HomeFaqSectionView key={section.id} section={section} />;
     case "leadCapture":
       return <LeadCaptureSectionView key={section.id} section={section} />;
     default:
@@ -110,6 +125,8 @@ export function HomePageTemplate({ page }: { page: HomePage }) {
                 {renderSection(section)}
               </div>
             ) : section.type === "homeGrowthApproach" ||
+              section.type === "homeFocusCard" ||
+              section.type === "homeFocusTextPanel" ||
               section.type === "caseCollection" ||
               section.type === "serviceCollection" ? (
               <RevealBlock key={section.id} variant="fadeUp" start="top 88%">

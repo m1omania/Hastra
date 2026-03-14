@@ -71,7 +71,12 @@ export function GrowthApproachStack({
           className={`growth-approach-stack__card sticky origin-top min-h-[14rem] flex flex-col justify-center transition-transform duration-200 ${i > 0 ? "mt-6" : ""} ${i === list.length - 1 ? "pb-8" : ""}`}
           style={{ transform: `scale(${scales[i]})`, top: getStickyTop(i), zIndex: 10 + Math.min(i, 8) }}
         >
-          <span className="growth-approach-stack__card-index">{String(i + 1).padStart(2, "0")}</span>
+          <span
+            className="growth-approach-stack__card-index !bg-[var(--color-accent)] !text-[#1c2338]"
+            style={{ color: "#1c2338" }}
+          >
+            {String(i + 1).padStart(2, "0")}
+          </span>
           <h3 className="growth-approach-stack__card-title">{item.title}</h3>
           <p className="growth-approach-stack__card-body">{item.body}</p>
         </li>

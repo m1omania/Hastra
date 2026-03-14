@@ -896,6 +896,7 @@ a {
   background: #fff;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   transition: transform 0.2s ease-out;
+  color: #111;
 }
 /* Sticky-позиции в центре viewport (а не под фиксированной шапкой). */
 .growth-approach-stack__sticky--1 {
@@ -920,14 +921,19 @@ a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
+  padding: 0.2rem 0.5rem;
+  min-height: 1.75rem;
+  min-width: auto;
+  width: fit-content;
   border-radius: 999px;
   background: var(--color-accent);
-  color: #111;
+  color: #1c2338 !important;
   font-size: 0.875rem;
   font-weight: 700;
   margin-bottom: 0.9rem;
+}
+.blocks-glass .growth-approach-stack__card .growth-approach-stack__card-index {
+  color: #1c2338 !important;
 }
 .growth-approach-stack__card-body {
   margin-top: 1rem;

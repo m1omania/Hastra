@@ -80,7 +80,7 @@ const SliderArrowsVertical = ({
     <button
       type="button"
       onClick={onPrev}
-      className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white transition-colors hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
+      className="flex h-12 w-12 items-center justify-center rounded-full border border-[#5a5e80] bg-[#1a1d42] text-white transition-colors hover:bg-[#22254d] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
       aria-label="Предыдущий отзыв"
     >
       <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -90,7 +90,7 @@ const SliderArrowsVertical = ({
     <button
       type="button"
       onClick={onNext}
-      className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white transition-colors hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
+      className="flex h-12 w-12 items-center justify-center rounded-full border border-[#5a5e80] bg-[#1a1d42] text-white transition-colors hover:bg-[#22254d] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
       aria-label="Следующий отзыв"
     >
       <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

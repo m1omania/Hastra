@@ -2,11 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import type {
   HomeAdvantageGridSection,
+  HomeAdvantagesWorkSection,
   HomeAgencyOverviewSection,
   HomeApproachSection,
   HomeCitiesSection,
   HomeFeatureNarrativeSection,
   HomeFeaturedCaseSection,
+  HomeFocusCardSection,
+  HomeFocusTextPanelSection,
   HomeForecastSection,
   HomeGrowthApproachSection,
   HomeHeroSection,
@@ -30,8 +33,9 @@ import { HeroAvatarStageWebGL } from "@/components/ui/hero-avatar-stage-webgl";
 import { HeroContent } from "@/components/ui/hero-content";
 import { HeroFiguresScroll } from "@/components/ui/hero-figures-scroll";
 import { HeroParticles } from "@/components/ui/hero-particles";
+import { FocusTextPanelAnimated } from "@/components/ui/focus-text-panel-animated";
 import { GrowthApproachStack } from "@/components/ui/growth-approach-stack";
-import { PartnerProblemsLadder } from "@/components/ui/partner-problems-ladder";
+import { ProblemQuizBlock } from "@/components/ui/problem-quiz-block";
 import { ScrollExpandWidth } from "@/components/ui/scroll-expand-width";
 import { RevealBlock } from "@/components/ui/reveal-block";
 import { RussiaMapWithMarkers } from "@/components/ui/russia-map-with-markers";
@@ -659,31 +663,40 @@ export function HomePartnerProblemsSectionView({
 }: {
   section: HomePartnerProblemsSection;
 }) {
-  const allProblems = [...section.data.problemsLeft, ...section.data.problemsRight];
   return (
     <section id={section.id} className="section-space relative py-16 md:py-20">
-      <div className="w-full">
-        <RevealBlock
-          variant="fadeUpStagger"
-          staggerSelector=".partner-problems-ladder__sentence"
-          staggerDelay={0.14}
-          start="top 80%"
-          scrub={0.5}
-          scrubScrollPx={1000}
-          staggerFromColor="var(--color-accent)"
-          staggerToColor="#ffffff"
-        >
-          <ScrollExpandWidth>
-            <div className="partner-problems-panel rounded-none py-10 sm:py-12 md:py-14">
-              <div className="mx-auto max-w-5xl px-6 sm:px-10 md:px-12">
-                <h2 className="mb-6 text-center text-[18px] font-semibold uppercase tracking-[0.24em] text-[var(--color-accent)] sm:mb-8">
-                  Проблемы клиентов
-                </h2>
-                <PartnerProblemsLadder items={allProblems} />
+      <div className="w-full space-y-0">
+        {[4].map((blockIndex) => (
+          <RevealBlock
+            key={blockIndex}
+            variant="fadeUpStagger"
+            staggerSelector=".partner-problems-ladder__sentence"
+            staggerDelay={0.14}
+            start="top 80%"
+            scrub={0.5}
+            scrubScrollPx={1000}
+            staggerFromColor="var(--color-accent)"
+            staggerToColor="#ffffff"
+          >
+            <ScrollExpandWidth>
+              <div className="partner-problems-panel rounded-none py-10 sm:py-12 md:py-14">
+                <div className="mx-auto max-w-5xl px-6 sm:px-10 md:px-12">
+                  <h2 className="mb-6 text-center text-[18px] font-semibold uppercase tracking-[0.24em] text-[var(--color-accent)] sm:mb-8">
+                    {blockIndex}
+                  </h2>
+                  <div className="partner-problems-ladder space-y-4 text-left text-white">
+                    <p className="partner-problems-ladder__text">
+                      KPI команды привязаны к результату
+                    </p>
+                    <p className="partner-problems-ladder__text">
+                      Мотивация специалистов связана с достижением целей проекта. Команда заинтересована в росте показателей и долгосрочном сотрудничестве.
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </ScrollExpandWidth>
-        </RevealBlock>
+            </ScrollExpandWidth>
+          </RevealBlock>
+        ))}
       </div>
     </section>
   );
@@ -714,6 +727,51 @@ export function HomeGrowthApproachSectionView({
   );
 }
 
+export function HomeFocusCardSectionView({
+  section,
+}: {
+  section: HomeFocusCardSection;
+}) {
+  const { index, title, body } = section.data;
+  return (
+    <section id={section.id} className="section-space">
+      <Container>
+        <div className="growth-approach-stack growth-approach-stack--list relative">
+          <div className="growth-approach-stack__card min-h-[14rem] flex flex-col justify-center">
+            <span
+              className="growth-approach-stack__card-index !bg-[var(--color-accent)] !text-[#1c2338]"
+              style={{ color: "#1c2338" }}
+            >
+              {index}
+            </span>
+            <h3 className="growth-approach-stack__card-title mt-0">{title}</h3>
+            <p className="growth-approach-stack__card-body">{body}</p>
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+export function HomeFocusTextPanelSectionView({
+  section,
+}: {
+  section: HomeFocusTextPanelSection;
+}) {
+  const lineTexts = section.data.lines.map((line) => line.text);
+  return (
+    <section id={section.id} className="section-space relative py-16 md:py-20">
+      <div className="w-full">
+        <div className="partner-problems-panel rounded-none py-10 sm:py-12 md:py-14">
+          <div className="mx-auto max-w-5xl px-6 sm:px-10 md:px-12">
+            <FocusTextPanelAnimated lines={lineTexts} />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function HomeAdvantageGridSectionView({
   section,
 }: {
@@ -729,6 +787,43 @@ export function HomeAdvantageGridSectionView({
               <div className="mx-auto h-16 w-16 rounded-full border-2 border-[var(--color-accent)]/40 bg-[var(--color-accent)]/15" />
               <p className="mt-5 text-sm leading-7 text-[var(--color-foreground)]">{item}</p>
             </SurfaceCard>
+          ))}
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+export function HomeAdvantagesWorkSectionView({
+  section,
+}: {
+  section: HomeAdvantagesWorkSection;
+}) {
+  return (
+    <section id={section.id} className="section-space">
+      <Container className="space-y-10">
+        <div className="section-heading text-center">
+          <h2 className="uppercase">{section.data.title}</h2>
+          <p className="mt-2 text-base text-[var(--color-muted)] sm:text-lg">
+            {section.data.description}
+          </p>
+        </div>
+        <div className="grid gap-5 sm:grid-cols-2">
+          {section.data.items.map((item, index) => (
+            <div
+              key={item.title}
+              className="rounded-2xl bg-[#0C0E4A] p-6"
+            >
+              <span className="inline-flex items-center justify-center rounded-full bg-[var(--color-accent)] px-3 py-1.5 text-sm font-bold text-[#1c2338]">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <h3 className="mt-4 text-base font-semibold text-white sm:text-lg">
+                {item.title}
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-white/80">
+                {item.description}
+              </p>
+            </div>
           ))}
         </div>
       </Container>
@@ -778,63 +873,7 @@ export function HomeProblemQuizSectionView({
   section: HomeProblemQuizSection;
 }) {
   return (
-    <section className="section-space section-bg-white">
-      <Container className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-        <div className="space-y-6">
-          <SectionHeading eyebrow={section.data.eyebrow} title={section.data.title} />
-          <div className="grid gap-3">
-            {section.data.problems.map((item) => (
-              <SurfaceCard key={item} className="py-4">
-                <p className="text-sm text-white">{item}</p>
-              </SurfaceCard>
-            ))}
-          </div>
-        </div>
-
-        <SurfaceCard className="space-y-8">
-          <SectionHeading
-            eyebrow="Квиз"
-            title={section.data.quizTitle}
-            description={section.data.quizSubtitle}
-          />
-          <div className="grid gap-5">
-            {section.data.quizSteps.map((item) => (
-              <div key={item.step} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
-                <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-accent)]">
-                  {item.step}
-                </p>
-                <h3 className="mt-3 text-lg font-semibold text-white">{item.title}</h3>
-                {item.options?.length ? (
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {item.options.map((option) => (
-                      <span
-                        key={option}
-                        className="rounded-full border border-white/10 px-3 py-2 text-xs text-[var(--color-muted)]"
-                      >
-                        {option}
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
-                {item.description ? (
-                  <p className="mt-4 text-sm leading-7 text-[var(--color-muted)]">
-                    {item.description}
-                  </p>
-                ) : null}
-              </div>
-            ))}
-          </div>
-          <div className="rounded-[1.75rem] border border-[var(--color-accent)]/20 bg-[var(--color-accent)]/8 p-6">
-            <h3 className="font-display text-2xl font-semibold text-white">
-              {section.data.finalTitle}
-            </h3>
-            <p className="mt-4 text-sm leading-7 text-[var(--color-muted)]">
-              {section.data.finalDescription}
-            </p>
-          </div>
-        </SurfaceCard>
-      </Container>
-    </section>
+    <ProblemQuizBlock title={section.data.quizTitle} steps={section.data.quizSteps} />
   );
 }
 
