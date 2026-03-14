@@ -36,9 +36,9 @@ import { HeroParticles } from "@/components/ui/hero-particles";
 import { FocusTextPanelAnimated } from "@/components/ui/focus-text-panel-animated";
 import { GrowthApproachStack } from "@/components/ui/growth-approach-stack";
 import { ProblemQuizBlock } from "@/components/ui/problem-quiz-block";
+import { CitiesMapOverlay } from "@/components/ui/cities-map-overlay";
 import { ScrollExpandWidth } from "@/components/ui/scroll-expand-width";
 import { RevealBlock } from "@/components/ui/reveal-block";
-import { RussiaMapWithMarkers } from "@/components/ui/russia-map-with-markers";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { SurfaceCard } from "@/components/ui/surface-card";
 
@@ -883,19 +883,9 @@ export function HomeCitiesSectionView({
   section: HomeCitiesSection;
 }) {
   return (
-    <section className="section-space bg-[#1C2338]">
-      <Container className="space-y-8">
-        <SectionHeading eyebrow={section.data.eyebrow} title={section.data.title} align="center" />
-
-        <RussiaMapWithMarkers />
-
-        <SurfaceCard>
-          <div className="flex flex-wrap gap-x-4 gap-y-3 text-sm leading-7 text-[var(--color-muted)]">
-            {section.data.cities.map((city) => (
-              <span key={city}>{city}</span>
-            ))}
-          </div>
-        </SurfaceCard>
+    <section className="section-space">
+      <Container>
+        <CitiesMapOverlay title={section.data.title} cities={section.data.cities} />
       </Container>
     </section>
   );

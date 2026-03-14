@@ -2,6 +2,7 @@ import type { HomePage, HomeSection } from "@/types/content";
 
 import { RevealBlock } from "@/components/ui/reveal-block";
 import { ScrollExpandWidth } from "@/components/ui/scroll-expand-width";
+import { SiteFooter } from "@/components/layout/site-footer";
 import {
   HomeAdvantageGridSectionView,
   HomeAdvantagesWorkSectionView,
@@ -145,6 +146,7 @@ export function HomePageTemplate({ page }: { page: HomePage }) {
           </div>
         </ScrollExpandWidth>
       ) : null}
+      <SiteFooter />
     </main>
   );
 }
