@@ -1096,7 +1096,7 @@ a {
 .blocks-glass .section-cases .case-grid__card,
 .blocks-glass .section-cases .case-grid__view-all {
   background: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  border: 1px solid #303266;
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;

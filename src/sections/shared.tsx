@@ -9,17 +9,44 @@ import type {
 import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
+import { AnimatedMetricValue } from "@/components/ui/animated-metric-value";
 import { ButtonLink } from "@/components/ui/button-link";
 import { CaseGalleryCenterMode } from "@/components/ui/case-gallery-center";
+import { RevealBlock } from "@/components/ui/reveal-block";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { SurfaceCard } from "@/components/ui/surface-card";
+import { TestimonialsSliderWithHeader } from "@/components/ui/testimonials-slider";
 
 /** Карточка кейса для сетки 3-2-3 (тот же контент, что в галерее) */
 function CaseGridCard({ item, className }: { item: CaseSummary; className?: string }) {
+  const renderMetricValue = (rawValue: string) => {
+    const trimmed = rawValue.trim();
+    const isPositive = trimmed.startsWith("+");
+    const isNegative = trimmed.startsWith("-");
+    const numericValue = (isPositive || isNegative) ? trimmed.slice(1) : trimmed;
+
+    return (
+      <span className="inline-flex items-center gap-1.5">
+        {isPositive ? (
+          <span className="text-[0.85em] leading-none text-[var(--color-accent)]" aria-hidden>
+            ▲
+          </span>
+        ) : null}
+        {isNegative ? (
+          <span className="text-[0.85em] leading-none text-[var(--color-accent)]" aria-hidden>
+            ▼
+          </span>
+        ) : null}
+        <AnimatedMetricValue value={numericValue} />
+      </span>
+    );
+  };
+
   return (
     <Link
       href={item.href ?? `/cases/${item.slug}`}
-      className={`case-grid__card group flex min-h-[320px] flex-col overflow-hidden rounded-2xl border-0 bg-white p-0 transition-transform duration-300 ease-out hover:scale-[1.02] sm:min-h-[360px] ${className ?? ""}`.trim()}
+      data-case-card
+      className={`case-grid__card group flex min-h-[320px] flex-col overflow-hidden rounded-2xl border border-[#303266] bg-white p-0 transition-transform duration-300 ease-out hover:scale-[1.02] sm:min-h-[360px] ${className ?? ""}`.trim()}
     >
       <div className="flex-1 bg-white p-8 sm:p-9">
         <h3 className="font-display text-xl font-semibold text-[#111]">{item.title}</h3>
@@ -29,7 +56,7 @@ function CaseGridCard({ item, className }: { item: CaseSummary; className?: stri
         <div className="flex h-full flex-col justify-center gap-2.5">
         {item.metrics.slice(0, 2).map((m) => (
           <div key={m.label} className="text-[var(--color-accent)]">
-            <span className="text-2xl font-semibold sm:text-[1.8rem]">{m.value}</span>
+            <span className="text-2xl font-semibold sm:text-[1.8rem]">{renderMetricValue(m.value)}</span>
             <span className="ml-1.5 text-sm font-medium text-white/90">{m.label}</span>
           </div>
         ))}
@@ -60,7 +87,8 @@ function CaseCollectionGrid332({ cases }: { cases: CaseSummary[] }) {
         ))}
         <Link
           href="/cases"
-          className="case-grid__view-all group flex min-h-[320px] flex-col items-center justify-center rounded-2xl border border-black/10 bg-white p-8 text-black transition-transform transition-colors duration-300 ease-out hover:scale-[1.02] hover:bg-neutral-50 sm:min-h-[360px] sm:p-9"
+          data-case-card
+          className="case-grid__view-all group flex min-h-[320px] flex-col items-center justify-center rounded-2xl border border-[#303266] bg-white p-8 text-black transition-transform transition-colors duration-300 ease-out hover:scale-[1.02] hover:bg-neutral-50 sm:min-h-[360px] sm:p-9"
         >
           <span className="font-display text-xl font-semibold text-[#111]">Смотреть все</span>
           <span className="mt-3 inline-flex text-2xl leading-none text-[var(--color-accent)] transition-transform duration-300 ease-out group-hover:translate-x-1" aria-hidden>
@@ -93,7 +121,9 @@ export function CaseCollectionSectionView({
               description={section.data.description}
               align="center"
             />
-            <CaseCollectionGrid332 cases={section.data.cases} />
+            <RevealBlock variant="fadeUpStagger" staggerSelector="[data-case-card]" staggerDelay={0.12} start="top 86%">
+              <CaseCollectionGrid332 cases={section.data.cases} />
+            </RevealBlock>
           </>
         ) : (
           <CaseGalleryCenterMode
@@ -115,28 +145,12 @@ export function TestimonialsSectionView({
 }) {
   return (
     <section id={section.id} className="section-space section-bg-white">
-      <Container className="space-y-10">
-        <SectionHeading
-          eyebrow={section.data.eyebrow}
+      <Container>
+        <TestimonialsSliderWithHeader
           title={section.data.title}
           description={section.data.description}
+          reviews={section.data.reviews}
         />
-
-        <div className="grid gap-6 lg:grid-cols-3">
-          {section.data.reviews.map((review) => (
-            <SurfaceCard key={`${review.name}-${review.company}`} className="h-full border-2 border-[var(--color-primary)]/10 bg-white shadow-md">
-              <p className="text-sm leading-7 text-[var(--color-muted)]">
-                “{review.quote}”
-              </p>
-              <div className="mt-8 border-t border-[var(--color-primary)]/15 pt-5">
-                <p className="font-semibold text-[var(--color-foreground)]">{review.name}</p>
-                <p className="mt-1 text-sm text-[var(--color-muted)]">
-                  {review.company} · {review.role}
-                </p>
-              </div>
-            </SurfaceCard>
-          ))}
-        </div>
       </Container>
     </section>
   );
