@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactElement } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 type NumericToken = {
@@ -94,7 +95,7 @@ export function AnimatedMetricValue({ value }: { value: string }) {
   }
 
   let cursor = 0;
-  const parts: Array<string | JSX.Element> = [];
+  const parts: Array<string | ReactElement> = [];
 
   tokens.forEach((token, i) => {
     if (token.start > cursor) {
