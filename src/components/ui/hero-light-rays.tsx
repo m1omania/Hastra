@@ -22,7 +22,7 @@ export function HeroLightRays({ className }: { className?: string }) {
       aria-hidden
     >
       <svg
-        className="absolute right-0 top-0 h-full min-h-[100vh] w-full min-w-[120%] [filter:blur(18px)]"
+        className="absolute right-0 top-0 h-full min-h-[100vh] w-full min-w-[120%]"
         viewBox="0 0 200 120"
         preserveAspectRatio="xMaxYMin meet"
       >

@@ -2,11 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import type {
   HomeAdvantageGridSection,
+  HomeAdvantagesWorkSection,
   HomeAgencyOverviewSection,
   HomeApproachSection,
   HomeCitiesSection,
   HomeFeatureNarrativeSection,
   HomeFeaturedCaseSection,
+  HomeFocusCardSection,
+  HomeFocusTextPanelSection,
   HomeForecastSection,
   HomeGrowthApproachSection,
   HomeHeroSection,
@@ -29,13 +32,13 @@ import { ButtonLink } from "@/components/ui/button-link";
 import { HeroAvatarStageWebGL } from "@/components/ui/hero-avatar-stage-webgl";
 import { HeroContent } from "@/components/ui/hero-content";
 import { HeroFiguresScroll } from "@/components/ui/hero-figures-scroll";
-import { HeroLightRays } from "@/components/ui/hero-light-rays";
 import { HeroParticles } from "@/components/ui/hero-particles";
+import { FocusTextPanelAnimated } from "@/components/ui/focus-text-panel-animated";
 import { GrowthApproachStack } from "@/components/ui/growth-approach-stack";
-import { PartnerProblemsLadder } from "@/components/ui/partner-problems-ladder";
+import { ProblemQuizBlock } from "@/components/ui/problem-quiz-block";
+import { CitiesMapOverlay } from "@/components/ui/cities-map-overlay";
 import { ScrollExpandWidth } from "@/components/ui/scroll-expand-width";
 import { RevealBlock } from "@/components/ui/reveal-block";
-import { RussiaMapWithMarkers } from "@/components/ui/russia-map-with-markers";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { SurfaceCard } from "@/components/ui/surface-card";
 
@@ -77,7 +80,6 @@ export function HeroFiguresBlock({ compact }: { compact?: boolean } = {}) {
         className={`hero-figures-block absolute top-0 bottom-0 w-full ${compact ? "hero-figures-block--no-bg left-1/2 -translate-x-1/2 max-w-4xl" : "left-1/2 -translate-x-1/2 max-w-7xl"}`}
       >
         <div className="hero-backdrop__bg absolute inset-0">
-          <HeroLightRays className="absolute inset-0" />
           {!compact && <HeroParticles className="absolute inset-0" />}
         </div>
         <div className="hero-figures absolute inset-0">
@@ -94,7 +96,6 @@ export function HomeHeroSectionView({ section }: { section: HomeHeroSection }) {
       {/* Один фиксированный контейнер: подложка (лучи, частицы) + слой фигур поверх */}
       <div className="hero-backdrop">
         <div className="hero-backdrop__bg">
-          <HeroLightRays className="absolute inset-0" />
           <HeroParticles className="absolute inset-0" />
         </div>
         <HeroFiguresScroll>
@@ -662,29 +663,35 @@ export function HomePartnerProblemsSectionView({
 }: {
   section: HomePartnerProblemsSection;
 }) {
-  const allProblems = [...section.data.problemsLeft, ...section.data.problemsRight];
+  const items = [...section.data.problemsLeft, ...section.data.problemsRight];
   return (
     <section id={section.id} className="section-space relative py-16 md:py-20">
-      <div className="w-full">
+      <Container className="space-y-10">
+        <h2 className="text-center font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+          {section.data.title}
+        </h2>
         <RevealBlock
           variant="fadeUpStagger"
-          staggerSelector=".partner-problems-ladder__sentence"
-          staggerDelay={0.14}
-          start="top 80%"
-          scrub={0.5}
-          scrubScrollPx={1000}
-          staggerFromColor="var(--color-accent)"
-          staggerToColor="#ffffff"
+          staggerSelector=".partner-problems-list__item"
+          staggerDelay={0.12}
+          start="top 85%"
+          scrub={0.65}
+          scrubScrollPx={1200}
         >
-          <ScrollExpandWidth>
-            <div className="partner-problems-panel rounded-none py-10 sm:py-12 md:py-14">
-              <div className="mx-auto max-w-5xl px-6 sm:px-10 md:px-12">
-                <PartnerProblemsLadder items={allProblems} />
+          <div className="mx-auto max-w-3xl space-y-4">
+            {items.map((item) => (
+              <div
+                key={item}
+                className="partner-problems-list__item rounded-2xl border border-white/10 bg-white/[0.04] px-6 py-5 sm:px-7"
+              >
+                <p className="text-[1.5rem] font-semibold leading-tight text-white">
+                  {item}
+                </p>
               </div>
-            </div>
-          </ScrollExpandWidth>
+            ))}
+          </div>
         </RevealBlock>
-      </div>
+      </Container>
     </section>
   );
 }
@@ -696,18 +703,65 @@ export function HomeGrowthApproachSectionView({
 }) {
   const { title, subtitle, items } = section.data;
   return (
-    <section id={section.id} className="section-space">
-      <Container className="space-y-6 text-center pb-12 md:pb-16">
-        <h2 className="font-display text-2xl font-semibold tracking-tight text-white sm:text-3xl lg:text-4xl">
-          {title}
-        </h2>
-        <p className="mx-auto max-w-2xl text-sm leading-7 text-white/80 sm:text-base">
-          {subtitle}
-        </p>
-      </Container>
+    <section id={section.id} className="section-space growth-approach-section">
+      <div className="sticky top-20 z-30 md:top-24">
+        <Container className="space-y-6 text-center pb-12 md:pb-16">
+          <h2 className="font-display text-2xl font-semibold tracking-tight text-white sm:text-3xl lg:text-4xl">
+            {title}
+          </h2>
+          <p className="mx-auto max-w-2xl text-sm leading-7 text-white/80 sm:text-base">
+            {subtitle}
+          </p>
+        </Container>
+      </div>
       <Container>
         <GrowthApproachStack items={items} />
       </Container>
+    </section>
+  );
+}
+
+export function HomeFocusCardSectionView({
+  section,
+}: {
+  section: HomeFocusCardSection;
+}) {
+  const { index, title, body } = section.data;
+  return (
+    <section id={section.id} className="section-space">
+      <Container>
+        <div className="growth-approach-stack growth-approach-stack--list relative">
+          <div className="growth-approach-stack__card min-h-[14rem] flex flex-col justify-center">
+            <span
+              className="growth-approach-stack__card-index !bg-[var(--color-accent)] !text-[#1c2338]"
+              style={{ color: "#1c2338" }}
+            >
+              {index}
+            </span>
+            <h3 className="growth-approach-stack__card-title mt-0">{title}</h3>
+            <p className="growth-approach-stack__card-body">{body}</p>
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+export function HomeFocusTextPanelSectionView({
+  section,
+}: {
+  section: HomeFocusTextPanelSection;
+}) {
+  const lineTexts = section.data.lines.map((line) => line.text);
+  return (
+    <section id={section.id} className="section-space relative py-16 md:py-20">
+      <div className="w-full">
+        <div className="partner-problems-panel rounded-none py-10 sm:py-12 md:py-14">
+          <div className="mx-auto max-w-5xl px-6 sm:px-10 md:px-12">
+            <FocusTextPanelAnimated lines={lineTexts} />
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
@@ -727,6 +781,43 @@ export function HomeAdvantageGridSectionView({
               <div className="mx-auto h-16 w-16 rounded-full border-2 border-[var(--color-accent)]/40 bg-[var(--color-accent)]/15" />
               <p className="mt-5 text-sm leading-7 text-[var(--color-foreground)]">{item}</p>
             </SurfaceCard>
+          ))}
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+export function HomeAdvantagesWorkSectionView({
+  section,
+}: {
+  section: HomeAdvantagesWorkSection;
+}) {
+  return (
+    <section id={section.id} className="section-space">
+      <Container className="space-y-10">
+        <div className="section-heading text-center">
+          <h2 className="uppercase">{section.data.title}</h2>
+          <p className="mt-2 text-base text-[var(--color-muted)] sm:text-lg">
+            {section.data.description}
+          </p>
+        </div>
+        <div className="grid gap-5 sm:grid-cols-2">
+          {section.data.items.map((item, index) => (
+            <div
+              key={item.title}
+              className="rounded-2xl bg-[#0C0E4A] p-6"
+            >
+              <span className="inline-flex items-center justify-center rounded-full bg-[var(--color-accent)] px-3 py-1.5 text-sm font-bold text-[#1c2338]">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <h3 className="mt-4 text-base font-semibold text-white sm:text-lg">
+                {item.title}
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-white/80">
+                {item.description}
+              </p>
+            </div>
           ))}
         </div>
       </Container>
@@ -776,63 +867,7 @@ export function HomeProblemQuizSectionView({
   section: HomeProblemQuizSection;
 }) {
   return (
-    <section className="section-space section-bg-white">
-      <Container className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-        <div className="space-y-6">
-          <SectionHeading eyebrow={section.data.eyebrow} title={section.data.title} />
-          <div className="grid gap-3">
-            {section.data.problems.map((item) => (
-              <SurfaceCard key={item} className="py-4">
-                <p className="text-sm text-white">{item}</p>
-              </SurfaceCard>
-            ))}
-          </div>
-        </div>
-
-        <SurfaceCard className="space-y-8">
-          <SectionHeading
-            eyebrow="Квиз"
-            title={section.data.quizTitle}
-            description={section.data.quizSubtitle}
-          />
-          <div className="grid gap-5">
-            {section.data.quizSteps.map((item) => (
-              <div key={item.step} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
-                <p className="text-xs uppercase tracking-[0.22em] text-[var(--color-accent)]">
-                  {item.step}
-                </p>
-                <h3 className="mt-3 text-lg font-semibold text-white">{item.title}</h3>
-                {item.options?.length ? (
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {item.options.map((option) => (
-                      <span
-                        key={option}
-                        className="rounded-full border border-white/10 px-3 py-2 text-xs text-[var(--color-muted)]"
-                      >
-                        {option}
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
-                {item.description ? (
-                  <p className="mt-4 text-sm leading-7 text-[var(--color-muted)]">
-                    {item.description}
-                  </p>
-                ) : null}
-              </div>
-            ))}
-          </div>
-          <div className="rounded-[1.75rem] border border-[var(--color-accent)]/20 bg-[var(--color-accent)]/8 p-6">
-            <h3 className="font-display text-2xl font-semibold text-white">
-              {section.data.finalTitle}
-            </h3>
-            <p className="mt-4 text-sm leading-7 text-[var(--color-muted)]">
-              {section.data.finalDescription}
-            </p>
-          </div>
-        </SurfaceCard>
-      </Container>
-    </section>
+    <ProblemQuizBlock title={section.data.quizTitle} steps={section.data.quizSteps} />
   );
 }
 
@@ -842,19 +877,9 @@ export function HomeCitiesSectionView({
   section: HomeCitiesSection;
 }) {
   return (
-    <section className="section-space bg-[#1C2338]">
-      <Container className="space-y-8">
-        <SectionHeading eyebrow={section.data.eyebrow} title={section.data.title} align="center" />
-
-        <RussiaMapWithMarkers />
-
-        <SurfaceCard>
-          <div className="flex flex-wrap gap-x-4 gap-y-3 text-sm leading-7 text-[var(--color-muted)]">
-            {section.data.cities.map((city) => (
-              <span key={city}>{city}</span>
-            ))}
-          </div>
-        </SurfaceCard>
+    <section className="section-space">
+      <Container>
+        <CitiesMapOverlay title={section.data.title} cities={section.data.cities} />
       </Container>
     </section>
   );
@@ -985,40 +1010,73 @@ export function ServiceCollectionSectionView({
 }: {
   section: ServiceCollectionSection;
 }) {
+  const services = section.data.services.slice(0, 6);
+  const iconFiles = [
+    "/icons/seo.svg",
+    "/icons/cont.svg",
+    "/icons/target.svg",
+    "/icons/app.svg",
+    "/icons/rep.svg",
+    "/icons/strat.svg",
+  ] as const;
+  const serviceGradientColors = [
+    ["255", "59", "48"],
+    ["56", "189", "248"],
+    ["167", "139", "250"],
+    ["244", "114", "182"],
+    ["251", "191", "36"],
+    ["132", "204", "22"],
+  ] as const;
   return (
     <section className="section-space section-bg-white section-services relative">
-      <Container>
-        <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-12">
-          <SectionHeading
-            eyebrow={section.data.eyebrow}
-            title={section.data.title}
-            description={section.data.description}
-          />
-          <ul className="flex flex-col gap-4">
-            {section.data.services.map((service) => (
-              <li key={service.slug}>
+      <Container className="space-y-10">
+        <div className="mx-auto max-w-4xl space-y-4 text-center">
+          <h2 className="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            {section.data.title}
+          </h2>
+          <p className="text-base leading-8 text-[var(--color-muted)]">
+            {section.data.description}
+          </p>
+        </div>
+        <RevealBlock variant="fadeUpStagger" staggerSelector="[data-service-card]" staggerDelay={0.12} start="top 86%">
+          <ul className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {services.map((service, index) => (
+              <li key={service.slug} className="h-full" data-service-card>
                 <Link
                   href={service.href ?? `/services/${service.slug}`}
-                  className="service-card-link flex w-full items-center justify-between gap-4 rounded-xl border-0 bg-white px-5 py-4 text-left transition-colors hover:bg-neutral-50"
+                className="service-card-link service-card service-card-gradient group flex h-full flex-col items-start rounded-2xl border-0 bg-white p-6 text-left transition-transform transition-colors duration-300 ease-out hover:scale-[1.02] hover:bg-neutral-50"
+                style={
+                  {
+                    "--service-grad-start-rgb": serviceGradientColors[index % serviceGradientColors.length].join(", "),
+                    "--service-grad-end-rgb": serviceGradientColors[(index + 2) % serviceGradientColors.length].join(", "),
+                  } as React.CSSProperties
+                }
                 >
-                  <div className="min-w-0">
-                    <span className="font-display text-lg font-semibold text-[var(--color-primary)]">
-                      {service.title}
-                    </span>
-                    {service.outcome ? (
-                      <p className="mt-1 text-sm text-neutral-600">
-                        {service.outcome}
-                      </p>
-                    ) : null}
-                  </div>
-                  <span className="shrink-0 text-[var(--color-accent)]" aria-hidden>
+                  <span className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-full border border-[var(--color-accent)] bg-[var(--color-accent)] text-[#111]" aria-hidden>
+                    <Image
+                      src={iconFiles[index % iconFiles.length]}
+                      alt=""
+                      width={20}
+                      height={20}
+                      className="h-5 w-5 object-contain"
+                    />
+                  </span>
+                  <h3 className="font-display text-xl font-semibold text-[#111]">
+                    {service.title}
+                  </h3>
+                  {(service.outcome || service.teaser) ? (
+                    <p className="mt-3 text-sm leading-7 text-[#333]">
+                      {service.outcome ?? service.teaser}
+                    </p>
+                  ) : null}
+                  <span className="mt-auto pt-5 inline-flex text-2xl leading-none text-[var(--color-accent)] transition-transform duration-300 ease-out group-hover:translate-x-1" aria-hidden>
                     →
                   </span>
                 </Link>
               </li>
             ))}
           </ul>
-        </div>
+        </RevealBlock>
       </Container>
     </section>
   );

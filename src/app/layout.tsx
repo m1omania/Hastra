@@ -3,7 +3,6 @@ import { GeistSans } from "geist/font/sans";
 
 import { SiteHeader } from "@/components/layout/site-header";
 import { HeroParticles } from "@/components/ui/hero-particles";
-import { ParticleLines } from "@/components/ui/particle-lines";
 
 import "./globals.css";
 
@@ -23,7 +22,6 @@ export default function RootLayout({
       <body className="min-h-screen bg-[var(--color-primary)] font-sans text-white antialiased">
         <div className="fixed inset-0 z-0">
           <HeroParticles className="absolute inset-0" />
-          <ParticleLines className="absolute inset-0" />
         </div>
         <div className="relative z-10">
           <SiteHeader />

@@ -15,8 +15,12 @@ const serviceLinks = [
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-white/10 bg-[var(--color-primary)] py-14">
-      <Container className="space-y-10">
+    <footer className="relative isolate z-50 py-14">
+      <div
+        className="absolute inset-0 z-40 border-t border-white/10 bg-[var(--color-primary)]"
+        aria-hidden
+      />
+      <Container className="relative z-50 space-y-10">
         <div className="grid gap-10 lg:grid-cols-[1fr_0.8fr_0.9fr]">
           <div className="space-y-5">
             <Image src="/logo-3.svg" alt="Hastra" width={160} height={44} className="h-10 w-auto" />

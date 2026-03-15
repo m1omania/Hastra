@@ -2,14 +2,18 @@ import type { HomePage, HomeSection } from "@/types/content";
 
 import { RevealBlock } from "@/components/ui/reveal-block";
 import { ScrollExpandWidth } from "@/components/ui/scroll-expand-width";
+import { SiteFooter } from "@/components/layout/site-footer";
 import {
   HomeAdvantageGridSectionView,
+  HomeAdvantagesWorkSectionView,
   HomeAgencyOverviewSectionView,
   HomeApproachSectionView,
   HomeCitiesSectionView,
   HomeFeatureNarrativeSectionView,
   HomeFeaturedCaseSectionView,
   HomeForecastSectionView,
+  HomeFocusCardSectionView,
+  HomeFocusTextPanelSectionView,
   HomeGrowthApproachSectionView,
   HomeHeroSectionView,
   HomeIndustriesSectionView,
@@ -26,7 +30,9 @@ import {
   HomeCostItemsSectionView,
 } from "@/sections/home";
 import {
+  AboutCompanySectionView,
   CaseCollectionSectionView,
+  HomeFaqSectionView,
   LeadCaptureSectionView,
   TestimonialsSectionView,
 } from "@/sections/shared";
@@ -37,6 +43,8 @@ function renderSection(section: HomeSection) {
       return <HomeHeroSectionView key={section.id} section={section} />;
     case "homeAgencyOverview":
       return <HomeAgencyOverviewSectionView key={section.id} section={section} />;
+    case "homeAboutCompany":
+      return <AboutCompanySectionView key={section.id} section={section} />;
     case "homeSeoIntro":
       return <HomeSeoIntroSectionView key={section.id} section={section} />;
     case "homeReasons":
@@ -59,8 +67,14 @@ function renderSection(section: HomeSection) {
       return <HomePartnerProblemsSectionView key={section.id} section={section} />;
     case "homeGrowthApproach":
       return <HomeGrowthApproachSectionView key={section.id} section={section} />;
+    case "homeFocusCard":
+      return <HomeFocusCardSectionView key={section.id} section={section} />;
+    case "homeFocusTextPanel":
+      return <HomeFocusTextPanelSectionView key={section.id} section={section} />;
     case "homeAdvantageGrid":
       return <HomeAdvantageGridSectionView key={section.id} section={section} />;
+    case "homeAdvantagesWork":
+      return <HomeAdvantagesWorkSectionView key={section.id} section={section} />;
     case "homeApproach":
       return <HomeApproachSectionView key={section.id} section={section} />;
     case "homeProblemQuiz":
@@ -79,6 +93,8 @@ function renderSection(section: HomeSection) {
       return <CaseCollectionSectionView key={section.id} section={section} />;
     case "testimonials":
       return <TestimonialsSectionView key={section.id} section={section} />;
+    case "homeFaq":
+      return <HomeFaqSectionView key={section.id} section={section} />;
     case "leadCapture":
       return <LeadCaptureSectionView key={section.id} section={section} />;
     default:
@@ -93,7 +109,7 @@ export function HomePageTemplate({ page }: { page: HomePage }) {
       {firstSection ? renderSection(firstSection) : null}
       {restSections.length > 0 ? (
         <ScrollExpandWidth>
-          <div className="blocks-glass relative z-10 flex flex-col gap-y-16 rounded-t-3xl bg-[rgb(15_23_42/0.94)] backdrop-blur-3xl px-6 py-10 sm:gap-y-20 sm:px-10 sm:py-12 lg:gap-y-24 lg:px-16 lg:py-14 xl:px-24">
+          <div className="blocks-glass relative z-10 flex flex-col gap-y-16 rounded-t-3xl bg-[var(--color-primary-darker)] px-6 py-10 sm:gap-y-20 sm:px-10 sm:py-12 lg:gap-y-24 lg:px-16 lg:py-14 xl:px-24">
             {restSections.map((section) =>
             section.type === "homePartners" ? (
               <div
@@ -110,6 +126,8 @@ export function HomePageTemplate({ page }: { page: HomePage }) {
                 {renderSection(section)}
               </div>
             ) : section.type === "homeGrowthApproach" ||
+              section.type === "homeFocusCard" ||
+              section.type === "homeFocusTextPanel" ||
               section.type === "caseCollection" ||
               section.type === "serviceCollection" ? (
               <RevealBlock key={section.id} variant="fadeUp" start="top 88%">
@@ -128,6 +146,7 @@ export function HomePageTemplate({ page }: { page: HomePage }) {
           </div>
         </ScrollExpandWidth>
       ) : null}
+      <SiteFooter />
     </main>
   );
 }

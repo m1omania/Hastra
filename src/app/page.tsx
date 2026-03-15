@@ -2,14 +2,17 @@ import type { Metadata } from "next";
 
 import { getHomePage } from "@/content/mock/site";
 import { buildMetadata } from "@/lib/seo";
-import { HomeHeroSectionView } from "@/sections/home";
+import { HomePageTemplate } from "@/templates/HomePageTemplate";
 
 const page = getHomePage();
-const heroSection = page.sections.find((s) => s.type === "homeHero");
+const visibleSectionTypes = new Set(["homeHero", "homePartnerProblems", "homeGrowthApproach", "homeFocusTextPanel", "serviceCollection", "caseCollection", "testimonials", "homeAboutCompany", "homeFaq", "homeProblemQuiz", "homeCities"]);
+const pageWithHeroProblemsAndSolutions = {
+  ...page,
+  sections: page.sections.filter((section) => visibleSectionTypes.has(section.type)),
+};
 
 export const metadata: Metadata = buildMetadata(page.seo, "/");
 
 export default function Home() {
-  if (!heroSection || heroSection.type !== "homeHero") return null;
-  return <HomeHeroSectionView section={heroSection} />;
+  return <HomePageTemplate page={pageWithHeroProblemsAndSolutions} />;
 }

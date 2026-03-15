@@ -29,7 +29,7 @@ export function SiteHeader() {
           </Link>
           <nav className="hidden items-center gap-6 text-sm text-white lg:flex">
           {navigation.map((item) => (
-            <Link key={item.href} href={item.href} className="transition hover:text-[var(--color-accent)]">
+            <Link key={item.href} href={item.href} className="font-semibold transition hover:text-[var(--color-accent)]">
               {item.label}
             </Link>
           ))}
@@ -37,7 +37,7 @@ export function SiteHeader() {
         </div>
 
         <div className="hidden items-center gap-6 lg:flex">
-          <span className="text-sm text-white/90">8 (800) 333-13-49</span>
+          <span className="text-sm font-semibold text-white/90">8 (800) 333-13-49</span>
           <ButtonLink href="#lead" intent="primary" className="rounded-full">
             Обсудить проект
           </ButtonLink>

@@ -2,6 +2,8 @@ import type {
   CaseCollectionSection,
   CaseSummary,
   FAQSection,
+  HomeAboutCompanySection,
+  HomeFaqSection,
   LeadCaptureSection,
   TestimonialsSection,
 } from "@/types/content";
@@ -9,29 +11,59 @@ import type {
 import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
+import { AnimatedMetricValue } from "@/components/ui/animated-metric-value";
 import { ButtonLink } from "@/components/ui/button-link";
 import { CaseGalleryCenterMode } from "@/components/ui/case-gallery-center";
+import { RevealBlock } from "@/components/ui/reveal-block";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { SurfaceCard } from "@/components/ui/surface-card";
+import { FaqAccordion } from "@/components/ui/faq-accordion";
+import { TestimonialsSliderWithHeader } from "@/components/ui/testimonials-slider";
 
 /** Карточка кейса для сетки 3-2-3 (тот же контент, что в галерее) */
 function CaseGridCard({ item, className }: { item: CaseSummary; className?: string }) {
+  const renderMetricValue = (rawValue: string) => {
+    const trimmed = rawValue.trim();
+    const isPositive = trimmed.startsWith("+");
+    const isNegative = trimmed.startsWith("-");
+    const numericValue = (isPositive || isNegative) ? trimmed.slice(1) : trimmed;
+
+    return (
+      <span className="inline-flex items-center gap-1.5">
+        {isPositive ? (
+          <span className="text-[0.85em] leading-none text-[var(--color-accent)]" aria-hidden>
+            ▲
+          </span>
+        ) : null}
+        {isNegative ? (
+          <span className="text-[0.85em] leading-none text-[var(--color-accent)]" aria-hidden>
+            ▼
+          </span>
+        ) : null}
+        <AnimatedMetricValue value={numericValue} />
+      </span>
+    );
+  };
+
   return (
     <Link
       href={item.href ?? `/cases/${item.slug}`}
-      className={`case-grid__card group flex min-h-[260px] flex-col rounded-xl border-0 bg-white/5 p-7 transition sm:min-h-[290px] sm:p-8 ${className ?? ""}`.trim()}
+      data-case-card
+      className={`case-grid__card group flex min-h-[320px] flex-col overflow-hidden rounded-2xl border border-[#303266] bg-white p-0 transition-transform duration-300 ease-out hover:scale-[1.02] sm:min-h-[360px] ${className ?? ""}`.trim()}
     >
-      <div>
-        <h3 className="font-display text-xl font-semibold text-white sm:text-2xl">{item.title}</h3>
-        <p className="mt-2.5 text-base leading-6 text-[var(--color-muted)] line-clamp-2 sm:text-[1.0625rem]">{item.excerpt}</p>
+      <div className="flex-1 bg-white p-8 sm:p-9">
+        <h3 className="font-display text-xl font-semibold text-[#111]">{item.title}</h3>
+        <p className="mt-3 text-sm leading-7 text-[#333] line-clamp-3">{item.excerpt}</p>
       </div>
-      <div className="mt-auto flex flex-col gap-2.5 pt-5">
+      <div className="mt-auto w-full bg-[var(--color-primary)] px-8 py-6 sm:px-9 min-h-[130px] sm:min-h-[140px]">
+        <div className="flex h-full flex-col justify-center gap-2.5">
         {item.metrics.slice(0, 2).map((m) => (
           <div key={m.label} className="text-[var(--color-accent)]">
-            <span className="text-xl font-semibold sm:text-2xl">{m.value}</span>
-            <span className="ml-1.5 text-sm font-medium opacity-90">{m.label}</span>
+            <span className="text-2xl font-semibold sm:text-[1.8rem]">{renderMetricValue(m.value)}</span>
+            <span className="ml-1.5 text-sm font-medium text-white/90">{m.label}</span>
           </div>
         ))}
+        </div>
       </div>
     </Link>
   );
@@ -58,9 +90,13 @@ function CaseCollectionGrid332({ cases }: { cases: CaseSummary[] }) {
         ))}
         <Link
           href="/cases"
-          className="case-grid__view-all flex min-h-[260px] flex-col items-center justify-center rounded-xl border-0 bg-white/5 p-7 text-[var(--color-accent)] transition sm:min-h-[290px] sm:p-8"
+          data-case-card
+          className="case-grid__view-all group flex min-h-[320px] flex-col items-center justify-center rounded-2xl border border-[#303266] bg-white p-8 text-black transition-transform transition-colors duration-300 ease-out hover:scale-[1.02] hover:bg-neutral-50 sm:min-h-[360px] sm:p-9"
         >
-          <span className="text-lg font-semibold sm:text-xl">Смотреть все</span>
+          <span className="font-display text-xl font-semibold text-[#111]">Смотреть все</span>
+          <span className="mt-3 inline-flex text-2xl leading-none text-[var(--color-accent)] transition-transform duration-300 ease-out group-hover:translate-x-1" aria-hidden>
+            →
+          </span>
         </Link>
       </div>
     </div>
@@ -79,7 +115,7 @@ export function CaseCollectionSectionView({
       id={section.id}
       className={`section-space section-bg-white ${isGrid332 ? "section-cases" : ""}`.trim()}
     >
-      <Container className={isGrid332 ? "max-w-5xl" : undefined}>
+      <Container>
         {isGrid332 ? (
           <>
             <SectionHeading
@@ -88,7 +124,9 @@ export function CaseCollectionSectionView({
               description={section.data.description}
               align="center"
             />
-            <CaseCollectionGrid332 cases={section.data.cases} />
+            <RevealBlock variant="fadeUpStagger" staggerSelector="[data-case-card]" staggerDelay={0.12} start="top 86%">
+              <CaseCollectionGrid332 cases={section.data.cases} />
+            </RevealBlock>
           </>
         ) : (
           <CaseGalleryCenterMode
@@ -103,6 +141,50 @@ export function CaseCollectionSectionView({
   );
 }
 
+export function AboutCompanySectionView({
+  section,
+}: {
+  section: HomeAboutCompanySection;
+}) {
+  return (
+    <section id={section.id} className="section-space section-bg-white">
+      <Container className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
+          <div className="section-heading">
+            <h2>{section.data.title}</h2>
+          </div>
+          {section.data.paragraphs.map((p) => (
+            <p key={p.slice(0, 40)} className="text-sm leading-8 text-[var(--color-muted)] sm:text-base">
+              {p}
+            </p>
+          ))}
+        </div>
+        <div className="space-y-5">
+          {section.data.approachItems.map((item, index) => (
+            <div
+              key={item.title}
+              className="min-h-44 rounded-2xl bg-[#0C0E4A] p-6"
+            >
+              <span
+                className="inline-flex items-center justify-center rounded-full bg-[var(--color-accent)] px-3 py-1.5 text-sm font-bold text-[#1c2338]"
+                aria-hidden
+              >
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <h4 className="mt-3 text-base font-semibold text-white sm:text-lg">
+                {item.title}
+              </h4>
+              <p className="mt-2 text-sm leading-7 text-white/80">
+                {item.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </section>
+  );
+}
+
 export function TestimonialsSectionView({
   section,
 }: {
@@ -110,29 +192,28 @@ export function TestimonialsSectionView({
 }) {
   return (
     <section id={section.id} className="section-space section-bg-white">
-      <Container className="space-y-10">
-        <SectionHeading
-          eyebrow={section.data.eyebrow}
+      <Container>
+        <TestimonialsSliderWithHeader
           title={section.data.title}
           description={section.data.description}
+          reviews={section.data.reviews}
         />
-
-        <div className="grid gap-6 lg:grid-cols-3">
-          {section.data.reviews.map((review) => (
-            <SurfaceCard key={`${review.name}-${review.company}`} className="h-full border-2 border-[var(--color-primary)]/10 bg-white shadow-md">
-              <p className="text-sm leading-7 text-[var(--color-muted)]">
-                “{review.quote}”
-              </p>
-              <div className="mt-8 border-t border-[var(--color-primary)]/15 pt-5">
-                <p className="font-semibold text-[var(--color-foreground)]">{review.name}</p>
-                <p className="mt-1 text-sm text-[var(--color-muted)]">
-                  {review.company} · {review.role}
-                </p>
-              </div>
-            </SurfaceCard>
-          ))}
-        </div>
       </Container>
+    </section>
+  );
+}
+
+export function HomeFaqSectionView({ section }: { section: HomeFaqSection }) {
+  return (
+    <section id={section.id} className="section-space">
+      <div className="mx-auto w-full max-w-7xl px-6 lg:px-10">
+        <div className="space-y-8 rounded-[1.5rem] bg-white px-6 py-8 shadow-sm sm:px-8 sm:py-10 lg:px-10">
+          <h2 className="font-display text-3xl font-semibold tracking-tight text-[#111] sm:text-4xl">
+            {section.data.title}
+          </h2>
+          <FaqAccordion items={section.data.items} />
+        </div>
+      </div>
     </section>
   );
 }

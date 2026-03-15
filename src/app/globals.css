@@ -4,12 +4,15 @@
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --color-primary: #0c0e4a;
+  --color-primary-darker: #080a38;
   --color-accent: #fbd701;
   --color-accent-strong: #ffe34d;
 }
 
 :root {
   --color-primary: #0c0e4a;
+  /* На тон темнее body */
+  --color-primary-darker: #080a38;
   /* Главный акцентный цвет — жёлтый как в логотипе */
   --color-accent: #fbd701;
   --color-accent-strong: #ffe34d;
@@ -37,6 +40,33 @@ a {
 ::selection {
   background: rgba(251, 215, 1, 0.35);
   color: #1c2338;
+}
+
+/* Перелив света на основной кнопке */
+.btn-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    transparent 35%,
+    rgba(255, 255, 255, 0.35) 48%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0.35) 52%,
+    transparent 65%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  background-position: 200% 0;
+  animation: btn-shimmer 6.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+  border-radius: inherit;
+}
+@keyframes btn-shimmer {
+  0% { background-position: 200% 0; }
+  50% { background-position: -100% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .page-shell {
@@ -169,32 +199,35 @@ a {
 /* Частицы в hero: разные размеры, диагональ, плавное появление/исчезновение */
 .hero-particle {
   position: absolute;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
-  filter: blur(2px);
+  background: rgba(255, 255, 255, 0.32);
+  filter: none;
   animation: hero-particle-drift 12s linear infinite both;
   will-change: transform, opacity;
+  border-radius: 0 !important;
+  -webkit-clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  transform-origin: 50% 66%;
 }
 .hero-particle--sm {
-  width: 3px;
-  height: 3px;
+  width: 6px;
+  height: 6px;
 }
 .hero-particle--md {
-  width: 5px;
-  height: 5px;
+  width: 9px;
+  height: 9px;
 }
 .hero-particle--lg {
-  width: 8px;
-  height: 8px;
+  width: 12px;
+  height: 12px;
 }
 .hero-particle--warm {
-  background: rgba(255, 245, 220, 0.55);
+  background: rgba(255, 245, 220, 0.34);
 }
 .hero-particle--accent {
-  background: rgba(251, 215, 1, 0.4);
+  background: rgba(251, 215, 1, 0.3);
 }
 .hero-particle--soft {
-  background: rgba(255, 250, 240, 0.5);
+  background: rgba(255, 250, 240, 0.3);
 }
 .hero-particle--pulse {
   animation: hero-particle-drift 12s linear infinite both,
@@ -208,8 +241,8 @@ a {
   animation-delay: var(--hero-particle-drift-delay, 0s), 0.7s;
 }
 @keyframes hero-particle-pulse {
-  0%, 100% { filter: blur(2px) brightness(1); }
-  50% { filter: blur(2px) brightness(1.45); }
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.45); }
 }
 
 /* Разноцветные светящиеся линии: прерывистые, цвет бежит вдоль луча */
@@ -242,7 +275,7 @@ a {
   -webkit-mask-image: linear-gradient(to right, black 0%, black 60%, transparent 100%);
   mask-size: 100% 100%;
   -webkit-mask-size: 100% 100%;
-  filter: blur(1px);
+  filter: none;
   box-shadow: 0 0 6px var(--particle-line-color);
   animation: particle-line-flow 1.8s linear infinite;
   animation-delay: var(--particle-line-delay, 0s);
@@ -766,7 +799,7 @@ a {
   grid-template-columns: repeat(3, 1fr);
 }
 .case-grid__row--2 {
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1.35fr 0.65fr;
 }
 @media (max-width: 767px) {
   .case-grid__row--3,
@@ -854,7 +887,7 @@ a {
 .growth-approach-stack__card {
   display: flex;
   flex-direction: column;
-  max-width: 42rem;
+  max-width: 48rem;
   margin-left: auto;
   margin-right: auto;
   padding: 2rem 1.5rem;
@@ -863,6 +896,20 @@ a {
   background: #fff;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   transition: transform 0.2s ease-out;
+  color: #111;
+}
+/* Sticky-позиции в центре viewport (а не под фиксированной шапкой). */
+.growth-approach-stack__sticky--1 {
+  top: calc(50vh - 10rem);
+}
+.growth-approach-stack__sticky--2 {
+  top: calc(50vh - 7.5rem);
+}
+.growth-approach-stack__sticky--3 {
+  top: calc(50vh - 5rem);
+}
+.growth-approach-stack__sticky--4 {
+  top: calc(50vh - 2.5rem);
 }
 .growth-approach-stack__card-title {
   font-size: 1.25rem;
@@ -870,15 +917,26 @@ a {
   color: #111;
   margin: 0;
 }
-.growth-approach-stack__card-line {
-  margin-top: 1.25rem;
-  width: 3rem;
-  height: 0.25rem;
-  border-radius: 2px;
+.growth-approach-stack__card-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem 0.5rem;
+  min-height: 1.75rem;
+  min-width: auto;
+  width: fit-content;
+  border-radius: 999px;
   background: var(--color-accent);
+  color: #1c2338 !important;
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin-bottom: 0.9rem;
+}
+.blocks-glass .growth-approach-stack__card .growth-approach-stack__card-index {
+  color: #1c2338 !important;
 }
 .growth-approach-stack__card-body {
-  margin-top: 1.25rem;
+  margin-top: 1rem;
   font-size: 0.9375rem;
   line-height: 1.6;
   color: #333;
@@ -887,6 +945,18 @@ a {
 @media (min-width: 768px) {
   .growth-approach-stack__card {
     padding: 2.5rem 2rem;
+  }
+  .growth-approach-stack__sticky--1 {
+    top: calc(50vh - 11rem);
+  }
+  .growth-approach-stack__sticky--2 {
+    top: calc(50vh - 8rem);
+  }
+  .growth-approach-stack__sticky--3 {
+    top: calc(50vh - 5rem);
+  }
+  .growth-approach-stack__sticky--4 {
+    top: calc(50vh - 2rem);
   }
   .growth-approach-stack__card-title {
     font-size: 1.5rem;
@@ -961,43 +1031,88 @@ a {
 .blocks-glass .logo-marquee {
   background: rgba(232, 236, 239, 0.85);
 }
-/* Блок услуги: тёмное стекло у карточек */
+/* Блок услуги: светлые карточки */
 .blocks-glass .section-services .service-card,
 .blocks-glass .section-services .service-card-link {
-  background: rgba(0, 0, 0, 0.28);
+  background: #fff;
   border: none;
-  box-shadow: none;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 .blocks-glass .section-services .service-card-link:hover {
-  background: rgba(0, 0, 0, 0.38);
+  background: #f8fafc;
   border: none;
 }
 .blocks-glass .section-services .service-card h3,
 .blocks-glass .section-services .service-card p,
 .blocks-glass .section-services .service-card-link span:not(.shrink-0) {
-  color: var(--color-foreground);
+  color: #111;
 }
 .blocks-glass .section-services .service-card-link .font-display {
-  color: #f8fafc !important;
+  color: #111 !important;
+}
+.blocks-glass .section-services .service-card-gradient {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.blocks-glass .section-services .service-card-gradient::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 50%;
+  background: linear-gradient(
+    20deg,
+    rgba(var(--service-grad-start-rgb, 255, 59, 48), 0.52) 0%,
+    rgba(var(--service-grad-end-rgb, 56, 189, 248), 0.2) 70%,
+    transparent 100%
+  );
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+  pointer-events: none;
+  z-index: 0;
+  mask-image: linear-gradient(to top, black 0%, black 62%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, black 0%, black 62%, transparent 100%);
+}
+.blocks-glass .section-services .service-card-gradient:hover::before {
+  opacity: 1;
+  transform: translateY(0);
+  animation: service-card-grad-rise 0.5s ease-out both;
+}
+.blocks-glass .section-services .service-card-gradient > * {
+  position: relative;
+  z-index: 1;
+}
+@keyframes service-card-grad-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Блок «Наши кейсы»: те же карточки, что у услуг (тёмное стекло, без обводки) */
+/* Блок «Наши кейсы»: карточки в стиле блока услуг (светлые) */
 .blocks-glass .section-cases .case-grid__card,
 .blocks-glass .section-cases .case-grid__view-all {
-  background: rgba(0, 0, 0, 0.28);
-  border: none;
-  box-shadow: none;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: #fff;
+  border: 1px solid #303266;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 .blocks-glass .section-cases .case-grid__card:hover,
 .blocks-glass .section-cases .case-grid__view-all:hover {
-  background: rgba(0, 0, 0, 0.38);
+  background: #f8fafc;
 }
 .blocks-glass .section-cases .case-grid__card h3 {
-  color: #f8fafc;
+  color: #111;
 }
 
 .blocks-glass .section-services .service-card-link .shrink-0 {
