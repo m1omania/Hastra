@@ -663,41 +663,35 @@ export function HomePartnerProblemsSectionView({
 }: {
   section: HomePartnerProblemsSection;
 }) {
+  const items = [...section.data.problemsLeft, ...section.data.problemsRight];
   return (
     <section id={section.id} className="section-space relative py-16 md:py-20">
-      <div className="w-full space-y-0">
-        {[4].map((blockIndex) => (
-          <RevealBlock
-            key={blockIndex}
-            variant="fadeUpStagger"
-            staggerSelector=".partner-problems-ladder__sentence"
-            staggerDelay={0.14}
-            start="top 80%"
-            scrub={0.5}
-            scrubScrollPx={1000}
-            staggerFromColor="var(--color-accent)"
-            staggerToColor="#ffffff"
-          >
-            <ScrollExpandWidth>
-              <div className="partner-problems-panel rounded-none py-10 sm:py-12 md:py-14">
-                <div className="mx-auto max-w-5xl px-6 sm:px-10 md:px-12">
-                  <h2 className="mb-6 text-center text-[18px] font-semibold uppercase tracking-[0.24em] text-[var(--color-accent)] sm:mb-8">
-                    {blockIndex}
-                  </h2>
-                  <div className="partner-problems-ladder space-y-4 text-left text-white">
-                    <p className="partner-problems-ladder__text">
-                      KPI команды привязаны к результату
-                    </p>
-                    <p className="partner-problems-ladder__text">
-                      Мотивация специалистов связана с достижением целей проекта. Команда заинтересована в росте показателей и долгосрочном сотрудничестве.
-                    </p>
-                  </div>
-                </div>
+      <Container className="space-y-10">
+        <h2 className="text-center font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+          {section.data.title}
+        </h2>
+        <RevealBlock
+          variant="fadeUpStagger"
+          staggerSelector=".partner-problems-list__item"
+          staggerDelay={0.12}
+          start="top 85%"
+          scrub={0.65}
+          scrubScrollPx={1200}
+        >
+          <div className="mx-auto max-w-3xl space-y-4">
+            {items.map((item) => (
+              <div
+                key={item}
+                className="partner-problems-list__item rounded-2xl border border-white/10 bg-white/[0.04] px-6 py-5 sm:px-7"
+              >
+                <p className="text-[1.5rem] font-semibold leading-tight text-white">
+                  {item}
+                </p>
               </div>
-            </ScrollExpandWidth>
-          </RevealBlock>
-        ))}
-      </div>
+            ))}
+          </div>
+        </RevealBlock>
+      </Container>
     </section>
   );
 }
@@ -1017,13 +1011,13 @@ export function ServiceCollectionSectionView({
   section: ServiceCollectionSection;
 }) {
   const services = section.data.services.slice(0, 6);
-  const iconPaths = [
-    "M11 5h8m-8 4h8m-8 4h5M5 6.5l1.5 1.5L9 5.5M5 12.5l1.5 1.5L9 11.5M5 18.5l1.5 1.5L9 17.5",
-    "M12 3l7.5 4.2v9.6L12 21l-7.5-4.2V7.2L12 3zm0 0v18m7.5-13.8L12 11.4 4.5 7.2",
-    "M4 12h16M12 4l8 8-8 8",
-    "M4 20l5.5-5.5m0 0a4 4 0 105.7-5.7 4 4 0 00-5.7 5.7z",
-    "M5 19V9m7 10V5m7 14v-7",
-    "M12 3l9 4.5-9 4.5-9-4.5L12 3zm0 9v9m-5-6l5 2.5 5-2.5",
+  const iconFiles = [
+    "/icons/seo.svg",
+    "/icons/cont.svg",
+    "/icons/target.svg",
+    "/icons/app.svg",
+    "/icons/rep.svg",
+    "/icons/strat.svg",
   ] as const;
   const serviceGradientColors = [
     ["255", "59", "48"],
@@ -1059,9 +1053,13 @@ export function ServiceCollectionSectionView({
                 }
                 >
                   <span className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-full border border-[var(--color-accent)] bg-[var(--color-accent)] text-[#111]" aria-hidden>
-                    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-                      <path d={iconPaths[index % iconPaths.length]} />
-                    </svg>
+                    <Image
+                      src={iconFiles[index % iconFiles.length]}
+                      alt=""
+                      width={20}
+                      height={20}
+                      className="h-5 w-5 object-contain"
+                    />
                   </span>
                   <h3 className="font-display text-xl font-semibold text-[#111]">
                     {service.title}

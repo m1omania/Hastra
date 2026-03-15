@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { Review } from "@/types/content";
@@ -41,26 +42,35 @@ function TestimonialCard({
   index: number;
 }) {
   return (
-    <article className="flex min-h-[380px] w-full overflow-hidden rounded-2xl bg-[#0C0E4A] text-white shadow-[0_10px_32px_rgba(0,0,0,0.22)] sm:min-h-[420px]">
-      <div className="flex w-[min(48%,360px)] shrink-0 flex-col items-center justify-center border-r border-white/15 px-8 py-10 sm:px-10 sm:py-12">
-        <span
-          className="inline-flex h-24 w-24 items-center justify-center rounded-full text-xl font-semibold text-white sm:h-28 sm:w-28 sm:text-2xl"
-          style={{ backgroundColor: pickAvatarColor(review.name, index) }}
-          aria-hidden
-        >
-          {initials(review.name)}
-        </span>
+    <article className="flex min-h-[380px] w-full overflow-hidden rounded-2xl bg-white text-[#111] shadow-[0_10px_32px_rgba(0,0,0,0.22)] sm:min-h-[420px]">
+      <div className="flex w-[min(48%,360px)] shrink-0 flex-col items-center justify-center border-r border-[#e5e7eb] px-8 py-10 sm:px-10 sm:py-12">
+        {review.logoSrc ? (
+          <Image
+            src={review.logoSrc}
+            alt={review.company}
+            width={300}
+            height={56}
+            className="h-auto w-full max-w-[280px] object-contain"
+          />
+        ) : (
+          <span
+            className="inline-flex h-24 w-24 items-center justify-center rounded-full text-xl font-semibold text-white sm:h-28 sm:w-28 sm:text-2xl"
+            style={{ backgroundColor: pickAvatarColor(review.name, index) }}
+            aria-hidden
+          >
+            {initials(review.name)}
+          </span>
+        )}
       </div>
       <div className="flex flex-1 flex-col justify-center p-6 sm:p-10">
-        <div className="text-5xl leading-none text-[var(--color-accent)] sm:text-6xl">"</div>
-        <p className="mt-4 text-base leading-8 text-white sm:text-lg sm:leading-9">
+        <p className="mt-4 text-base leading-8 text-[#111] sm:text-lg sm:leading-9">
           {review.quote}
         </p>
-        <p className="mt-8 text-base font-semibold text-white sm:text-lg">
+        <p className="mt-8 text-base font-semibold text-[#111] sm:text-lg">
           {review.name}
         </p>
-        <p className="mt-1 text-sm text-white/75 sm:text-base">
-          {review.company} · {review.role}
+        <p className="mt-1 text-sm text-[#4b5563] sm:text-base">
+          {review.role ? `${review.company} · ${review.role}` : review.company}
         </p>
       </div>
     </article>

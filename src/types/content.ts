@@ -27,6 +27,7 @@ export interface Review {
   company: string;
   role: string;
   quote: string;
+  logoSrc?: string;
 }
 
 export interface FAQItem {

@@ -887,7 +887,7 @@ a {
 .growth-approach-stack__card {
   display: flex;
   flex-direction: column;
-  max-width: 42rem;
+  max-width: 48rem;
   margin-left: auto;
   margin-right: auto;
   padding: 2rem 1.5rem;
